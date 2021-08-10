@@ -1,6 +1,6 @@
 haconfig
 ========
-My smarthome setup, using Home Assistant, ZZH CC2652R, Zigbee2MQTT and AppDaemon.
+My smarthome setup, using Home Assistant on a RaspBerry Pi4, ZZH CC2652R, Zigbee2MQTT and AppDaemon.
 
 Devices
 ========
@@ -27,6 +27,11 @@ Sensors
 - 4x Aqara Motion Sensor
 - 1x Aqara Temperature & Humidity Sensor
 - 1x Aeotec Multipurpose Sensor
+
+Network
+-------
+- 2x Ubiquiti AmpliFi Router
+- 1x Ubiquiti UniFi Switch 8 60W
 
 Why AppDaemon?
 ==============
