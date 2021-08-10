@@ -14,7 +14,7 @@ Lights
 Speakers
 --------
 - 3x Google Nest Audio
-- 3x Google Nest Mini 2nd gen
+- 1x Google Nest Mini 2nd gen
 
 Switches
 --------
@@ -26,6 +26,7 @@ Sensors
 - 1x Hue Motion Sensor
 - 4x Aqara Motion Sensor
 - 1x Aqara Temperature & Humidity Sensor
+- 1x Aeotec Multipurpose Sensor
 
 Why AppDaemon?
 ==============
