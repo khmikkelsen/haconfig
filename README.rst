@@ -1,6 +1,6 @@
 haconfig
 ========
-My smarthome setup, running Home Assistant on a Raspberry Pi4, ZZH CC2652R, Zigbee2MQTT and AppDaemon.
+My smarthome setup, running Home Assistant on a Raspberry Pi4, with a CC2652R for Zigbee2MQTT.
 
 Devices
 ========
