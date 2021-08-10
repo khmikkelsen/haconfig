@@ -1,0 +1,38 @@
+
+
+kitchen_increase:
+  alias: Kitchen Light Up
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.kitchen_lights
+        transition: '0.5'
+        brightness: >
+          {% if state_attr('light.kitchen_lights', 'brightness') != none %}
+            {% set n = states.light.kitchen_lights.attributes.brightness + 36 %}
+            {% if n > 255 %}
+              255
+            {% else %}
+              {{ n }}
+            {% endif %}
+          {% else %}
+            36
+          {% endif %}
+kitchen_decrease:
+  alias: Kitchen Light Down
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.kitchen_lights
+        transition: '0.5'
+        brightness: >
+          {% set n = states.light.kitchen_lights.attributes.brightness - 36 %}
+          {% if n < 0 %}
+            0
+          {% else %}
+            {{ n }}
+          {% endif %}
+
+
+
+    

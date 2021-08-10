@@ -1,0 +1,37 @@
+- platform: group
+  name: "Kitchen Lights"
+  entities:
+    - light.kitchen_spot_light_1
+    - light.kitchen_spot_light_2
+- platform: group
+  name: "Bedroom Lights"
+  entities:
+    - light.bed_light
+    - light.tall_light
+    - light.bedroom_spot_light
+- platform: group
+  name: "Hallway Lights"
+  entities:
+    - light.hallway_light
+- platform: group
+  name: "Living Room Lights"
+  entities:
+    - light.dining_table_light
+    - light.round_light
+    - light.window_light
+- platform: group
+  name: "All Lights"
+  entities:
+    - light.bed_light
+    - light.tall_light
+    - light.bedroom_spot_light
+    - light.dining_table_light
+    - light.round_light
+    - light.window_light
+    - light.hallway_light
+    - light.kitchen_spot_light_1
+    - light.kitchen_spot_light_2
+- platform: group
+  name: "Bathroom Lights"
+  entities:
+    - light.bathroom_light

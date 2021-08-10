@@ -1,0 +1,102 @@
+increase_brightness:
+  alias: Increases brightness for an entity
+  fields:
+    entity: 
+      description: "Entity to increase brightness for"
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: "{{ entity }}"
+        transition: '0.5'
+        brightness: >
+          {% if state_attr(entity, 'brightness') != none %}
+            {% set n = state_attr(entity, 'brightness') | int + 36 %}
+            {% if n > 255 %}
+              255
+            {% else %}
+              {{ n }}
+            {% endif %}
+          {% else %}
+            36
+          {% endif %}
+decrease_brightness:
+  alias: Decrease brightness for an entity
+  fields:
+    entity: 
+      description: "Entity to decrease brightness for"
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: "{{ entity }}"
+        transition: '0.5'
+        brightness: >
+          {% set n = state_attr(entity, 'brightness') | int - 36 %}
+          {% if n < 0 %}
+            0
+          {% else %}
+            {{ n }}
+          {% endif %}
+increase_transition:
+  alias: Increase party transition interval
+  fields:
+    max:
+      description: "Max transition number to increase"
+    min:
+      description: "Min transition number to increase"
+    step:
+      description: "Step size in a number"
+  sequence:
+    - service: input_number.set_value
+      target:
+        entity_id: "{{ max }}"
+      data:
+        value: >
+          {% set n = states(entity) | int + step %}
+          {% if n <= state_attr(entity, 'max') %}
+            {{ n }}
+          {% else %}
+            {{ state_attr(entity, 'max') }}
+          {% endif %}
+    - service: input_number.set_value
+      target:
+        entity_id: "{{ min }}"
+      data:
+        value: >
+          {% set n = states(entity) | int + step %}
+          {% if n <= state_attr(entity, 'max') | int %}
+            {{ n }}
+          {% else %}
+            {{ state_attr(entity, 'max') | int}}
+          {% endif %}
+decrease_transition:
+  alias: Increase party transition interval
+  fields:
+    max:
+      description: "Max transition number to increase"
+    min:
+      description: "Min transition number to increase"
+    step:
+      description: "Step size in a number"
+  sequence:
+    - service: input_number.set_value
+      target:
+        entity_id: "{{ max }}"
+      data:
+        value: >
+          {% set n = states(entity) | int - step %}
+          {% if n >= state_attr(entity, 'min') | int %}
+            {{ n }}
+          {% else %}
+            {{ state_attr(entity, 'min') | int}}
+          {% endif %}
+    - service: input_number.set_value
+      target:
+        entity_id: "{{ min }}"
+      data:
+        value: >
+          {% set n = states(entity) | int - step %}
+          {% if n >= state_attr(entity, 'min') | int %}
+            {{ n }}
+          {% else %}
+            {{ state_attr(entity, 'min') | int}}
+          {% endif %}

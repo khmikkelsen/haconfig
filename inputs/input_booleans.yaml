@@ -1,0 +1,29 @@
+start_goodnight:
+  name: Start the goodnight routine
+  initial: off
+bedroom_blocker:
+  name: Bedroom Blocker
+  initial: off
+living_room_blocker:
+  name: Living Room Blocker
+  initial: off
+kitchen_blocker:
+  name: Kitchen Blocker
+  initial: off
+hallway_blocker:
+  name: Hallway Blocker
+  initial: off
+bedroom_party:
+  name: Party Mode
+  initial: off
+living_room_party:
+  name: Party Mode
+  initial: off
+kitchen_party:
+  name: Party Mode
+  initial: off
+hallway_party:
+  name: Party Mode
+has_wakeup:
+  name: Wakeup
+  initial: off

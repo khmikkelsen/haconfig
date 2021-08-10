@@ -1,0 +1,12 @@
+- id: '398340920023'
+  alias: Couch Button
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.couch_switch_action
+      to: 'single'
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.round_light

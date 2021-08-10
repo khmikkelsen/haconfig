@@ -1,0 +1,169 @@
+- id: '01423432450'
+  alias: Bedroom Wake Up - alarm
+  description: Wakes up lights based on Google Home alarm
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.bedroom_speaker_alarms
+    value_template: '{{ state_attr(''sensor.bedroom_speaker_alarms'', ''fire_time'')
+      | int - now().timestamp() }}'
+    below: 600
+  action:
+  - service: automation.turn_off
+    entity_id: automation.bedroom_motion
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.bedroom
+    data:
+      transition: 1800
+      brightness: 100
+  - delay: 1800
+  - service: automation.turn_on
+    entity_id: automation.bedroom_motion
+- id: '123454234'
+  alias: Bedroom Wake Up Lights - dumb
+  description: Wakes up light in a dumb way
+  trigger:
+  - platform: time
+    at: 06:52:00
+  action:
+  - service: automation.turn_off
+    entity_id: automation.bedroom_motion
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.bedroom
+      - light.bedroom_spot_light
+    data:
+      kelvin: 500
+      transition: 1800
+      brightness: 255
+  - delay: 1801
+  - service: automation.turn_on
+    entity_id: automation.bedroom_motion
+- id: '23400243'
+  alias: Bedroom Wake Up Lights - calendar
+  description: Wakes up lights based on calendar value
+  trigger:
+    platform: state
+    entity_id: calendar.work
+    to: 'on'
+  condition:
+  - condition: time
+    after: '04:00:00'
+    before: '12:00:00'
+  action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.has_wakeup
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.bedroom_lights
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_lights
+    data:
+      kelvin: 500
+      brightness: 1
+  - service: automation.turn_off
+    entity_id: automation.bedroom_motion
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.bedroom_lights
+    data:
+      kelvin: 500
+      transition: 1800
+      brightness: 255
+  - delay: 120
+  - service: automation.turn_on
+    entity_id: automation.bedroom_motion
+  - service: script.set_hue_sensitivity
+    data:
+      mode: 'high'
+  mode: restart
+- id: '52349860'
+  alias: Activate Goodnight
+  trigger:
+  - platform: state
+    entity_id: input_boolean.start_goodnight
+    to: 'on'
+  action:
+  - service: script.bedroom_goodnight
+  - service: script.set_hue_sensitivity
+    data:
+      mode: 'low'
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.start_goodnight
+
+- id: '12031029123'
+  alias: Reset Wakeup
+  trigger:
+  - platform: time
+    at: '23:59:00'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.has_wakeup
+
+- id: '1252349243'
+  alias: Backup wakeup
+  trigger:
+  - platform: time
+    at: '09:50:00'
+  condition: "{{ states('input_boolean.has_wakeup') == 'off' }}"
+  action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.has_wakeup
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.bedroom_lights
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_lights
+    data:
+      kelvin: 500
+      brightness: 1
+  - service: automation.turn_off
+    entity_id: automation.bedroom_motion
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.bedroom_lights
+    data:
+      kelvin: 500
+      transition: 1800
+      brightness: 255
+  - delay: 120
+  - service: automation.turn_on
+    entity_id: automation.bedroom_motion
+  - service: script.set_hue_sensitivity
+    data:
+      mode: 'high'
+  - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.bedroom_sensor_occupancy
+        to: 'on'
+  - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.living_room_sensor_occupancy
+        to: 'on'
+  - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.hallway_sensor_occupancy
+        to: 'on'
+  - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.0x00158d00067c52d2_occupancy
+        to: 'on'
+  - service: light.turn_off
+    target:
+      entity_id: light.bedroom_lights
+      
+      
+

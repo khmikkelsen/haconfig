@@ -1,0 +1,94 @@
+hallway_luminance_level:
+  name: Illuminance
+  mode: slider
+  min: 0
+  max: 70
+  step: 1
+kitchen_luminance_level:
+  name: Illuminance
+  mode: slider
+  min: 0
+  max: 70
+  step: 1
+bedroom_luminance_level:
+  name: Illuminance
+  mode: slider
+  min: 0
+  max: 70
+  step: 1
+bathroom_luminance_level:
+  name: Illuminance
+  mode: slider
+  min: 0
+  max: 70
+  step: 1
+living_room_luminance_level:
+  name: Illuminance
+  mode: slider
+  min: 0
+  max: 70
+  step: 1
+bedroom_trans_min:
+  name: Transition Minimum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 1
+  min: 0.1
+  max: 60
+  step: 0.1
+bedroom_trans_max:
+  name: Transition Maximum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 3
+  min: 0.1
+  max: 61
+  step: 0.1
+living_room_trans_min:
+  name: Transition Minimum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 1
+  min: 0.1
+  max: 60
+  step: 0.1
+living_room_trans_max:
+  name: Transition Maximum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 3
+  min: 0.1
+  max: 61
+  step: 0.1
+kitchen_trans_min:
+  name: Transition Minimum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 1
+  min: 0.1
+  max: 60
+  step: 0.1
+kitchen_trans_max:
+  name: Transition Maximum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 3
+  min: 0.1
+  max: 61
+  step: 0.1
+hallway_trans_min:
+  name: Transition Minimum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 1
+  min: 0.1
+  max: 60
+  step: 0.1
+hallway_trans_max:
+  name: Transition Maximum
+  mode: slider
+  unit_of_measurement: seconds
+  initial: 3
+  min: 0.1
+  max: 61
+  step: 0.1

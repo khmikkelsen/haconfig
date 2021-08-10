@@ -1,0 +1,3 @@
+- platform: switch
+  name: Bathroom Light
+  entity_id: switch.bathroom_switch

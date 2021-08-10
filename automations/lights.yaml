@@ -1,0 +1,39 @@
+- id: '09859043091278'
+  alias: Knock knock
+  trigger:
+    platform: state
+    entity_id: binary_sensor.hallway_door_sensor_moving
+    to: 'on'
+  action:
+    - delay:
+        seconds: 1
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.hallway_door_sensor_contact
+          state: 'off'
+    - service: scene.create
+      data:
+        scene_id: knock
+        snapshot_entities:
+        - light.bed_light
+        - light.tall_light
+        - light.bedroom_spot_light
+        - light.dining_table_light
+        - light.round_light
+        - light.hallway_light
+        - light.kitchen_spot_light_1
+        - light.kitchen_spot_light_2
+        - light.window_light
+    - service: light.turn_on
+      entity_id: light.all_lights
+      data:
+        hs_color: [120, 100]
+        transition: 0.1
+        brightness: 230
+    - delay:
+        milliseconds: 1500
+    - service: scene.turn_on
+      entity_id: scene.knock
+      data:
+        transition: 0.2

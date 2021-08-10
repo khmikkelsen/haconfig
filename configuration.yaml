@@ -1,0 +1,129 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+light: !include light.yaml
+light groups: !include light-groups.yaml
+automation manual: !include_dir_merge_list automations/
+automation ui: !include automations.yaml
+script: !include_dir_merge_named scripts/
+scene: !include scenes.yaml
+input_boolean: !include inputs/input_booleans.yaml
+input_number: !include inputs/input_numbers.yaml
+input_select: !include inputs/input_selects.yaml
+input_text: !include inputs/input_texts.yaml
+
+lovelace:
+  mode: yaml
+  resources:
+    - url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
+      type: module
+
+wake_on_lan:
+
+webostv:
+  host: !secret webos_ip
+  name: Living Room TV
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret proxy_subnet
+
+google_assistant:
+  project_id: !secret ghome_id
+  service_account: !include google_service.json
+  report_state: true
+  expose_by_default: false
+  exposed_domains:
+    - switch
+    - input_boolean
+    - light
+  entity_config:
+    light.bedroom_spot_light:
+      expose: true
+    light.tall_light:
+      expose: true
+    light.bed_light:
+      expose: true
+    light.hallway_light:
+      expose: true
+    light.kitchen_spot_light_1:
+      expose: true
+    light.kitchen_spot_light_2:
+      expose: true
+    light.round_light:
+      expose: true
+    light.dining_table_light:
+      expose: true
+    light.window_light:
+      expose: true
+    input_boolean.start_goodnight:
+      expose: true
+    scene.bedroom_relax:
+      expose: true
+    scene.bedroom_bright:
+      expose: true
+    scene.bedroom_focus:
+      expose: true
+    scene.bedroom_night:
+      expose: true
+    scene.living_room_relax:
+      expose: true
+    scene.living_room_bright:
+      expose: true
+    scene.living_room_focus:
+      expose: true
+    scene.living_room_night:
+      expose: true
+    scene.hallway_relax:
+      expose: true
+    scene.hallway_bright:
+      expose: true
+    scene.hallway_focus:
+      expose: true
+    scene.kitchen_relax:
+      expose: true
+    scene.kitchen_bright:
+      expose: true
+    scene.kitchen_focus:
+      expose: true
+
+
+google:
+  client_id: !secret g_uid
+  client_secret: !secret g_secret
+
+folder_watcher:
+  - folder: /config/blueprints
+
+homeassistant:
+  allowlist_external_dirs:
+    - "/config/blueprints"
+
+switch:
+  - platform: wake_on_lan
+    mac: !secret desktop_mac
+    name: "Desktop"
+  - platform: template
+    switches:
+      party:
+        value_template: '{{ states("input_boolean.party") }}'
+        friendly_name: 'Party Mode'
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.party
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.party
+  - platform: "mqtt"
+    state_topic: "zigbee2mqtt/bathroom_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_off: "OFF"
+    payload_on: "ON"
+    value_template: "{{ value_json.state }}"
+    command_topic: "zigbee2mqtt/bathroom_switch/set"

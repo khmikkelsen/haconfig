@@ -1,0 +1,35 @@
+- id: '043053490590124'
+  alias: 'Party Mode on'
+  initial_state: true
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: input_boolean.party
+      from: 'off'
+      to: 'on'
+    - platform: state
+      entity_id: input_number.trans_max
+    - platform: state
+      entity_id: input_number.trans_min
+  condition: "{{ is_state('input_boolean.party', 'on') }}"
+  action: 
+    service: script.lights_partying_on
+- id: '23489234901'
+  alias: 'Party Mode off'
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: input_boolean.party
+      from: 'on'
+      to: 'off'
+  action:
+    - service: light.turn_off
+      entity_id:
+        - light.all_lights
+    - delay: 
+        seconds: 0.6
+    - service: script.lights_partying_off
+    - service: input_number.set_value
+      entity_id: input_number.trans_max
+    - service: input_number.reload
+      entity_id: input_number.trans_min

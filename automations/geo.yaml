@@ -1,0 +1,23 @@
+- id: '12312316324'
+  alias: Leaving Home
+  trigger: 
+    - platform: state
+      entity_id:
+        - device_tracker.oneplus_a6013
+      from: "home"
+      for: '00:02:00'
+  action:
+    - service: input_boolean.turn_off
+      target:
+        entity_id: 
+          - input_boolean.bedroom_party
+          - input_boolean.hallway_party
+          - input_boolean.kitchen_party
+          - input_boolean.living_room_party
+    - service: light.turn_off
+      target:
+        entity_id: light.all_lights
+    - service: media_player.turn_off
+      target:
+        entity_id: group.speakers
+    

@@ -1,0 +1,126 @@
+---
+Global:
+  module: global
+  class: Global
+
+bedroom_dimmer:
+  module: dimmer_switch
+  class: Dimmer
+  dimmer_switch: sensor.bedroom_dimmer_switch_action
+  light_group: light.bedroom_lights
+  party_boolean: input_boolean.bedroom_party
+  scene_selector: input_select.bedroom_scene_selector
+  blocker: input_boolean.bedroom_blocker
+  trans_max: input_number.bedroom_trans_max
+  trans_min: input_number.bedroom_trans_min
+  log_level: DEBUG
+  dependencies: Global
+
+living_room_dimmer:
+  module: dimmer_switch
+  class: Dimmer
+  dimmer_switch: sensor.living_room_dimmer_switch_action
+  light_group: light.living_room_lights
+  party_boolean: input_boolean.living_room_party
+  scene_selector: input_select.living_room_selector
+  blocker: input_boolean.living_room_blocker
+  trans_max: input_number.living_room_trans_max
+  trans_min: input_number.living_room_trans_min
+  log_level: DEBUG
+  dependencies: Global
+  
+kitchen_dimmer:
+  module: dimmer_switch
+  class: Dimmer
+  dimmer_switch: sensor.kitchen_dimmer_switch_action
+  light_group: light.kitchen_lights
+  party_boolean: input_boolean.kitchen_party
+  scene_selector: input_select.kitchen_scene_selector
+  blocker: input_boolean.kitchen_blocker
+  trans_max: input_number.kitchen_trans_max
+  trans_min: input_number.kitchen_trans_min
+  log_level: DEBUG
+  dependencies: Global
+
+tod:
+  module: tod
+  class: Tod
+  night_input: input_boolean.start_goodnight
+  mode_input: input_text.mode
+
+bedroom_motion:
+  module: motion_sensor
+  class: Motion
+  motion_sensor: binary_sensor.bedroom_sensor_occupancy
+  lx_sensor: sensor.bedroom_sensor_illuminance_lux
+  min_lx: input_number.bedroom_luminance_level
+  light_group: light.bedroom_lights
+  mode_input: input_text.mode
+  blocker: input_boolean.bedroom_blocker
+  scene_morning: scene.bedroom_relax
+  scene_day: scene.bedroom_bright
+  scene_evening: scene.bedroom_relax
+  scene_night: scene.bedroom_night
+
+living_room_motion:
+  module: motion_sensor
+  class: Motion
+  motion_sensor: binary_sensor.living_room_sensor_occupancy
+  lx_sensor: sensor.living_room_sensor_illuminance_lux
+  min_lx: input_number.living_room_luminance_level
+  light_group: light.living_room_lights
+  mode_input: input_text.mode
+  blocker: input_boolean.living_room_blocker
+  scene_morning: scene.living_room_relax
+  scene_day: scene.living_room_bright
+  scene_evening: scene.living_room_relax
+  scene_night: scene.living_room_night
+
+hallway_motion:
+  module: motion_sensor
+  class: Motion
+  motion_sensor: binary_sensor.hallway_sensor_occupancy
+  lx_sensor: sensor.hallway_sensor_illuminance_lux
+  min_lx: input_number.hallway_luminance_level
+  light_group: light.hallway_lights
+  mode_input: input_text.mode
+  blocker: input_boolean.hallway_blocker
+  scene_morning: scene.hallway_relax
+  scene_day: scene.hallway_bright
+  scene_evening: scene.hallway_relax
+  scene_night: scene.hallway_night
+  wait_morning: 660
+  wait_day: 900
+  wait_evening: 900
+  wait_night: 120
+
+kitchen_motion:
+  module: motion_sensor
+  class: Motion
+  motion_sensor: binary_sensor.kitchen_sensor_occupancy
+  lx_sensor: sensor.kitchen_sensor_illuminance_lux
+  min_lx: input_number.kitchen_luminance_level
+  light_group: light.kitchen_lights
+  mode_input: input_text.mode
+  blocker: input_boolean.kitchen_blocker
+  scene_morning: scene.kitchen_night
+  scene_day: scene.kitchen_bright
+  scene_evening: scene.kitchen_night
+  scene_night: scene.kitchen_night
+  wait_morning: 660
+  wait_day: 900
+  wait_evening: 900
+  wait_night: 120
+
+bathroom_motion:
+  module: motion_sensor
+  class: Motion
+  motion_sensor: binary_sensor.bathroom_sensor_occupancy
+  lx_sensor: sensor.bathroom_sensor_illuminance_lux
+  min_lx: input_number.bathroom_luminance_level
+  light_group: light.bathroom_light
+  mode_input: input_text.mode
+  wait_morning: 420
+  wait_day: 420
+  wait_evening: 420
+  wait_night: 420

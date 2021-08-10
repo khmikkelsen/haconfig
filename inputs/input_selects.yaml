@@ -1,0 +1,21 @@
+bedroom_scene_selector:
+  options:
+  - bedroom_relax
+  - bedroom_bright
+  - bedroom_focus
+  - bedroom_night
+  initial: bedroom_relax
+  icon: mdi:counter
+kitchen_scene_selector:
+  options:
+  - kitchen_bright
+  - kitchen_focus
+  - kitchen_night
+  initial: kitchen_bright
+living_room_selector:
+  options:
+  - living_room_relax
+  - living_room_bright
+  - living_room_focus
+  - living_room_night
+  initial: living_room_bright
