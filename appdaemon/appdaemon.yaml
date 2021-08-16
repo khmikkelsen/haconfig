@@ -9,10 +9,25 @@ appdaemon:
     HASS:
       type: hass
   log_thread_actions: 1
-  total_threads: 10
   pin_apps: true
 http:
   url: http://127.0.0.1:5050
 admin:
 api:
 hadashboard:
+logs:
+  main_log:
+    name: Main
+    filename: /config/logs/appdaemon.log
+  access_log:
+    name: Access
+    filename: /config/logs/access.log
+  error_log:
+    name: Error
+    filename: /config/logs/error.log
+  diag_log:
+    name: Diag
+    filename: /config/logs/diag.log
+  test_log:
+    name: Test
+    filename: /config/logs/test.log
