@@ -19,7 +19,7 @@ Speakers
 Switches
 --------
 - 3x Philips Hue Dimmer Switches 2nd gen
-- 3x Aqara Mini Switch
+- 6x Aqara Mini Switch
 
 Sensors
 -------
