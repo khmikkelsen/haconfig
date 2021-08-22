@@ -1,0 +1,36 @@
+- id: '59823490234'
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.hallway_door_sensor_contact
+      from: 'off'
+      to: 'on'
+  action:
+    - service: light.turn_off
+      target:
+        entity_id: light.bathroom_lights
+    - wait_template: "{{ is_state('binary_sensor.hallway_sensor_contact', 'off') }}"
+      timeout: "00:00:10"
+    - service: input_boolean.turn_on
+      target:
+        entity_id: 
+          - input_boolean.hallway_party
+          - input_boolean.kitchen_party
+          - input_boolean.living_room_party
+    - service: tts.google_translate_say
+      entity_id: media_player.bathroom_speaker
+      data_template:
+         message: "Welcome back Solveig, to the superior scandinavian country. We hope you enjoyed your little getaway."
+    - delay: 20
+    - service: input_boolean.turn_off
+      target:
+        entity_id: 
+          - input_boolean.hallway_party
+          - input_boolean.kitchen_party
+          - input_boolean.living_room_party
+    - service: scene.turn_on
+      target: 
+        entity_id: 
+          - scene.kitchen_bright
+          - scene.hallway_evening
+          - scene.living_room_bright

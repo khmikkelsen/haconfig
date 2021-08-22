@@ -90,6 +90,8 @@
     entity_id: input_boolean.start_goodnight
     to: 'on'
   action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.kristians_gn
   - service: script.bedroom_goodnight
   - service: script.set_hue_sensitivity
     data:
@@ -98,10 +100,11 @@
     entity_id: input_boolean.start_goodnight
 
 - id: '12031029123'
-  alias: Reset Wakeup
+  alias: Reset Kristian Wakeup
   trigger:
   - platform: time
     at: '23:59:00'
+  condition: "{{ states('device_tracker.kristians_oneplus') == 'home' }}"
   action:
     - service: input_boolean.turn_off
       entity_id: input_boolean.has_wakeup
@@ -110,8 +113,12 @@
   alias: Backup wakeup
   trigger:
   - platform: time
-    at: '09:50:00'
-  condition: "{{ states('input_boolean.has_wakeup') == 'off' }}"
+    at: '08:50:00'
+  condition: 
+    - condition: and
+      conditions: 
+        - "{{ states('input_boolean.has_wakeup') == 'off' }}"
+        - "{{ states('device_tracker.kristians_oneplus') == 'home' }}"
   action:
   - service: input_boolean.turn_on
     entity_id: input_boolean.has_wakeup
@@ -159,11 +166,25 @@
   - wait_for_trigger: 
       - platform: state
         entity_id:
-          - binary_sensor.0x00158d00067c52d2_occupancy
+          - binary_sensor.bathroom_sensor_occupancy
         to: 'on'
   - service: light.turn_off
     target:
       entity_id: light.bedroom_lights
+
+- id: '54392098349'
+  alias: 'Reset goodnights'
+  trigger:
+    - platform: state
+      entity_id:
+        - input_text.mode
+      to: 'morning'
+  action:
+    - service: input_boolean.turn_off
+      entity_id:
+        - input_boolean.solveigs_gn
+        - input_boolean.kristians_gn
+  
       
       
 

@@ -1,6 +1,5 @@
 start_goodnight:
   name: Start the goodnight routine
-  initial: off
 bedroom_blocker:
   name: Bedroom Blocker
   initial: off
@@ -26,4 +25,9 @@ hallway_party:
   name: Party Mode
 has_wakeup:
   name: Wakeup
-  initial: off
+tod:
+  name: Time of day
+solveigs_gn:
+  name: Solveig is asleep
+kristians_gn:
+  name: Kristian is asleep

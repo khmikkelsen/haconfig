@@ -1,0 +1,25 @@
+- platform: bayesian
+  name: 'is_nighttime'
+  prior: 0.0
+  probability_threshold: 0.95
+  observations: 
+    - platform: template
+      value_template: >
+        {{ is_state('device_tracker.kristians_oneplus', 'not_home') and is_state('device_tracker.solveigs_iphone', 'home') }}
+      prob_given_true: 0.5
+      prob_given_false: 0.05
+    - platform: template
+      value_template: >
+        {{ is_state('device_tracker.solveigs_iphone', 'not_home') and is_state('device_tracker.kristians_oneplus', 'home') }}
+      prob_given_true: 0.5
+      prob_given_false: 0.05
+    - platform: "state"
+      entity_id: 'input_boolean.kristians_gn'
+      prob_given_true: 0.5
+      prob_given_false: 0.1
+      to_state: 'on'
+    - platform: 'state'
+      entity_id: 'input_boolean.solveigs_gn'
+      prob_given_true: 0.5
+      prob_given_false: 0.1
+      to_state: 'on'
