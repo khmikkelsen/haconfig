@@ -31,7 +31,8 @@ class Motion(hass.Hass):
             self.on_transition = args.get('on_transition', 0.7)
             # handler from last trigger
             self._handle = None
-
+            self._last_trigger_time = None
+            self._mode_changed_handler = self.listen_state(self.mode_changed_cb, self.mode_input)
             self._motion_handler = self.listen_state(self.motion, self.motion_sensor, new='on')
 
         except (TypeError, ValueError) as e:
@@ -45,15 +46,17 @@ class Motion(hass.Hass):
             self._handle = await self.create_task(self.motion_run())
 
     async def motion_run(self, **kwargs):
-        if self.is_local_control():
+        if await self.is_local_control():
             supported_colors = await self.get_state(self.light_group, attribute='supported_color_modes')
             mode = await self.get_mode()
+            wait = kwargs.get('wait', getattr(self, f'wait_{mode}'))
             if supported_colors == ['onoff']:
                 await self.turn_on(self.light_group)
             else:
                 await self.turn_on(getattr(self, f'scene_{mode}'), transition=self.on_transition)
-            await self.sleep(getattr(self, f'wait_{mode}'))
-            if self.is_local_control():
+            self._last_trigger_time = await self.get_now_ts()
+            await self.sleep(wait)
+            if await self.is_local_control():
                 await self.turn_off(self.light_group, transition=self.off_transition)
 
     async def get_mode(self):
@@ -72,6 +75,18 @@ class Motion(hass.Hass):
 
     async def is_local_control(self):
         return (self.blocker and await self.get_state(self.blocker) == 'off') or self.blocker is None
+
+    async def mode_changed_cb(self, entity, attribute, old, new, kwargs):
+        scene = getattr(self, f'scene_{new}')
+        lights_state = await self.get_state(self.light_group)
+        if lights_state == 'on':
+            await self.turn_on(self.blocker)
+            await self.turn_on(scene, transition=120)
+            await self.sleep(121)
+            await self.turn_off(self.blocker)
+            await self.sleep(1)
+            diff = getattr(self, f"wait_{new}") - await self.get_now_ts() - self._last_trigger_time 
+            await self.motion_run(wait=diff)
 
     @property
     def scene_morning(self):
@@ -105,3 +120,7 @@ class Motion(hass.Hass):
         if self._handle:
             if not self._handle.done():
                 self._handle.cancel()
+
+    def ad_api_all_apps(self):
+        objs = self.get_ad_api().AD.app_management.objects
+        self.log(objs)
