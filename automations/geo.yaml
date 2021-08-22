@@ -3,9 +3,19 @@
   trigger: 
     - platform: state
       entity_id:
-        - device_tracker.oneplus_a6013
+        - device_tracker.kristians_oneplus
+        - device_tracker.solveigs_iphone
       from: "home"
-      for: '00:02:00'
+      for: '00:00:10'
+  condition:
+    - condition: not
+      conditions:
+        - condition: state
+          entity_id: device_tracker.solveigs_iphone
+          state: 'home'
+        - condition: state
+          entity_id: device_tracker.kristians_oneplus
+          state: 'home'
   action:
     - service: input_boolean.turn_off
       target:
@@ -19,5 +29,24 @@
         entity_id: light.all_lights
     - service: media_player.turn_off
       target:
-        entity_id: group.speakers
-    
+        entity_id: 
+          - group.speakers
+          - media_player.bedroom_tv
+          - media_player.living_room_tv
+- id: '1231231632123'
+  alias: Kristian Leaving Home
+  trigger:
+    - platform: state
+      entity_id:
+        - device_tracker.kristians_oneplus
+      from: "home"
+      for: '00:00:10'
+  action:
+    - service: light.turn_off
+      target:
+        entity_id: light.bedroom_lights
+    - service: media_player.turn_off
+      target:
+        entity_id:
+          - media_player.bedroom_speaker
+          - media_player.bedroom_tv
