@@ -3,6 +3,7 @@ import warnings
 from collections import OrderedDict
 
 import appdaemon.plugins.hass.hassapi as hass
+from typing import List
 
 BASE_DELAY = 0.1
 
@@ -34,45 +35,10 @@ class Dimmer(hass.Hass):
             self.party_state = self.args['party_boolean']
             self._scene_selector = self.args['scene_selector']
             self._master = self.args.get('master', False)
+            if self._master:
+                self._master = True
             self.blocker = self.args.get('blocker')
-            self._scenes = [
-                {"wait": 0,
-                 "trans_max": 26,
-                 "trans_min": 15,
-                 "colours": [{
-                     "hue": 35,
-                     "sat": 90,
-                     "val": 210,
-                     "hue_dev": 15,
-                     "sat_dev": 10,
-                     "val_dev": 35}]},
-                {"wait": 0,
-                 "trans_max": 3,
-                 "trans_min": 1,
-                 "colours": [{
-                     "hue": 1,
-                     "sat": 50,
-                     "val": 255,
-                     "hue_dev": 179,
-                     "sat_dev": 49,
-                     "val_dev": 1}]},
-                {"wait": 4,
-                 "trans_max": 1,
-                 "trans_min": 0.5,
-                 "colours": [{
-                     "hue": 360,
-                     "sat": 100,
-                     "val": 255,
-                     "hue_dev": 10,
-                     "sat_dev": 0,
-                     "val_dev": 10},
-                     {"hue": 360,
-                      "sat": 1,
-                      "val": 255,
-                      "hue_dev": 0,
-                      "sat_dev": 0,
-                      "val_dev": 10}]}
-            ]
+            self._scenes = self.party_scenes
             self._trans_max = self.args['trans_max']
             self._trans_min = self.args['trans_min']
             self._trans_max_step = float(self.args.get('trans_max_step', 2))
@@ -82,6 +48,7 @@ class Dimmer(hass.Hass):
         except (TypeError, ValueError) as e:
             self.log('Incomplete configuration', level="ERROR")
             raise e
+        self.apps = self.all_apps_of_me()
         self.dimmer_handler = self.listen_state(self.dimmer_button_pressed, self._dimmer, attribute='action')
         self.scene_handler = self.listen_state(self.scene_selector_changed, self._scene_selector)
         self.party_on_handler = self.listen_state(self.party_on, self.party_state, old='off', new='on')
@@ -97,27 +64,34 @@ class Dimmer(hass.Hass):
             if payload == 'on_press':
                 self.toggle(self._light_group)
             elif payload == 'up_press':
-                self.increase_brightness(self._light_group)
+                self.increase_brightness()
             elif payload == 'down_press':
-                self.decrease_brightness(self._light_group)
+                self.decrease_brightness()
             elif payload == 'off_press':
+                self.save_scene()
                 self.create_task(self.next_scene())
             elif payload == 'off_hold':
-                self.strobe_lights(self._light_group)
+                self.strobe_lights()
+                self.check_call_on_slaves('strobe_lights')
             elif payload == 'off_hold_release':
-                self.turn_on(self.party_state)
+                self.toggle_party_state()
+                self.check_call_on_slaves('toggle_party_state')
+
 
         elif party_state == 'on':
             if payload == 'on_press':
-                self.toggle(self.party_state)
+                self.toggle_party_state()
+                self.check_call_on_slaves('toggle_party_state')
             elif payload == 'up_press':
-                self.increase_transition(self._trans_max)
+                self.increase_transition()
+                self.check_call_on_slaves('increase_transition')
             elif payload == 'down_press':
-                self.decrease_transition(self._trans_min)
-            elif payload == 'off_press_release':
-                self.next_party_scene(self._light_group)
-            elif payload == 'off_hold_release':
-                self.next_party_scene(self._light_group)
+                self.decrease_transition()
+                self.check_call_on_slaves('decrease_transition')
+            elif payload == 'off_press':
+                self.next_party_scene()
+                self.check_call_on_slaves('next_party_scene')
+            
         else:
             raise ValueError(f'Incorrect state: {party_state}')
 
@@ -127,6 +101,14 @@ class Dimmer(hass.Hass):
                 self.turn_on(self.blocker)
             elif after_state == 'off':
                 self.turn_off(self.blocker)
+            
+    def check_call_on_slaves(self, attr):
+        if self._master:
+            for app in self.apps:
+                getattr(app, attr)()
+
+    def toggle_party_state(self):
+        self.toggle(self.party_state)
 
     def set_inputs(self):
         choice = self.party_scene
@@ -136,19 +118,7 @@ class Dimmer(hass.Hass):
         self.set_value(self._trans_min, trans_min)
 
     def party_on(self, entity, attribute, old, new, kwargs):
-        try:
-            od = OrderedDict()
-            od['scene_id'] = self.get_scene_id()
-            od['snapshot_entities'] = self.get_lights()
-            self.log(f'od: {od}')
-            self.call_service(
-                'scene/create',
-                data=od)
-        except BadRequest as e:
-            self.log(f'ERR_MSG: {e}')
-            raise e
         self.run_sequence([{'sleep': 0.5}])
-        self.log(f'index={self._party_index}, iterating: {self.get_lights()}')
         self.set_inputs()
         self.create_handles()
 
@@ -175,11 +145,12 @@ class Dimmer(hass.Hass):
         self.log('exited ')
 
     def party_off(self, entity, attribute, old, new, kwargs):
-        self.call_service('scene/turn_on', target={'entity_id': self.get_scene_id()})
+        self._cancel_handles()
         max_init = self.get_state(self._trans_max, attribute='initial')
         self.set_value(self._trans_max, max_init)
         min_init = self.get_state(self._trans_min, attribute='initial')
         self.set_value(self._trans_min, min_init)
+        self.turn_on(f'scene.{self.get_scene_id()}', transition=0.5)
 
     def aggr_hue(self, choice):
         if choice.get('hue_dev') != 0:
@@ -248,13 +219,14 @@ class Dimmer(hass.Hass):
         except BadRequest as e:
             raise e
 
-    def next_party_scene(self, lights):
+    def next_party_scene(self):
         self._cancel_handles()
         self._party_index = (self._party_index + 1) % len(self._scenes)
         self.set_inputs()
         self.create_handles()
 
-    def increase_brightness(self, lights):
+    def increase_brightness(self):
+        lights = self._light_group
         brightness = self.get_state(lights, attribute='brightness')
         if brightness is None:
             self.turn_on(lights, brightness=36, transition=0.5)
@@ -264,7 +236,8 @@ class Dimmer(hass.Hass):
                 new_brightness = 255
             self.turn_on(lights, brightness=new_brightness, transition=0.5)
 
-    def decrease_brightness(self, lights):
+    def decrease_brightness(self):
+        lights = self._light_group
         brightness = self.get_state(lights, attribute='brightness')
         if brightness is not None:
             new_brightness = brightness - 36
@@ -273,7 +246,7 @@ class Dimmer(hass.Hass):
             else:
                 self.turn_on(lights, brightness=new_brightness, transition=0.2)
 
-    def increase_transition(self, light_group):
+    def increase_transition(self):
         state_max = self.get_state(self._trans_max, attribute='all')
         state_min = self.get_state(self._trans_min, attribute='all')
         limit_max = state_max['attributes'].get('max')
@@ -296,7 +269,7 @@ class Dimmer(hass.Hass):
         self.call_service('input_number/set_value', entity_id=self._trans_max, value=new_max)
         self.call_service('input_number/set_value', entity_id=self._trans_min, value=new_min)
 
-    def decrease_transition(self, light_group):
+    def decrease_transition(self):
         state_max = self.get_state(self._trans_max, attribute='all')
         state_min = self.get_state(self._trans_min, attribute='all')
         limit_max = state_max['attributes'].get('min') * 4
@@ -318,20 +291,26 @@ class Dimmer(hass.Hass):
         self.call_service('input_number/set_value', entity_id=self._trans_max, value=new_max)
         self.call_service('input_number/set_value', entity_id=self._trans_min, value=new_min)
 
-    def get_lights(self):
+    def get_lights(self) -> List[str]:
         return self.get_state(self._light_group, attribute='entity_id')
 
-    def strobe_lights(self, lights):
-        self.turn_on(lights, flash="short")
+    def strobe_lights(self):
+        self.turn_on(self._light_group, flash="short")
 
     @property
     def party_scene(self):
         return self._scenes[self._party_index]
 
-    def get_scene_id(self):
+    def get_scene_id(self) -> str:
         id_ = self.get_state(self._light_group, attribute='all').get('entity_id') + 'party'
-        self.log(f'new scene id: {id_}')
+        id_ = id_.split('.')[1]
+        self.log(f'scene id: {id_}')
         return id_
+
+    def save_scene(self):
+        self.call_service("scene/create",
+                          scene_id=self.get_scene_id(),
+                          snapshot_entities=self.get_lights())
 
     def create_handles(self):
         for light in self.get_lights():
@@ -341,3 +320,54 @@ class Dimmer(hass.Hass):
         for h in self._handles:
             if not h.done():
                 h.cancel()
+
+    def all_apps_of_me(self):
+        objs = self.get_ad_api().AD.app_management.objects
+        lst = []
+        for key, val in objs.items():
+            obj = val['object']
+            if isinstance(obj, self.__class__):
+                lst.append(obj)
+        self.log(str(lst), log='test_log')
+        return lst
+
+    @property
+    def party_scenes(self):
+        return [
+                {"wait": 0,
+                 "trans_max": 3,
+                 "trans_min": 1,
+                 "colours": [{
+                     "hue": 1,
+                     "sat": 50,
+                     "val": 255,
+                     "hue_dev": 179,
+                     "sat_dev": 49,
+                     "val_dev": 1}]},
+                {"wait": 0,
+                 "trans_max": 26,
+                 "trans_min": 15,
+                 "colours": [{
+                     "hue": 35,
+                     "sat": 90,
+                     "val": 210,
+                     "hue_dev": 15,
+                     "sat_dev": 10,
+                     "val_dev": 35}]},
+                {"wait": 4,
+                 "trans_max": 1,
+                 "trans_min": 0.5,
+                 "colours": [{
+                     "hue": 360,
+                     "sat": 100,
+                     "val": 255,
+                     "hue_dev": 10,
+                     "sat_dev": 0,
+                     "val_dev": 10},
+                     {"hue": 360,
+                      "sat": 1,
+                      "val": 255,
+                      "hue_dev": 0,
+                      "sat_dev": 0,
+                      "val_dev": 10}]}
+            ]
