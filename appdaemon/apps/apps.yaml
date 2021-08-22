@@ -1,7 +1,16 @@
 ---
+
 Global:
   module: global
   class: Global
+
+music_transition:
+  module: music_flow
+  class: MusicFlow
+  last_notification_sensor: sensor.oneplus_6t_last_notification
+  device_tracker: device_tracker.kristians_oneplus
+  contact_sensor: binary_sensor.hallway_door_sensor_contact
+  speakers: media_player.bedroom_speaker
 
 bedroom_dimmer:
   module: dimmer_switch
@@ -20,6 +29,7 @@ living_room_dimmer:
   module: dimmer_switch
   class: Dimmer
   dimmer_switch: sensor.living_room_dimmer_switch_action
+  master: true
   light_group: light.living_room_lights
   party_boolean: input_boolean.living_room_party
   scene_selector: input_select.living_room_selector
@@ -42,10 +52,23 @@ kitchen_dimmer:
   log_level: DEBUG
   dependencies: Global
 
+hallway_dimmer:
+  module: dimmer_switch
+  class: Dimmer
+  dimmer_switch: sensor.kitchen_dimmer_switch_action
+  light_group: light.hallway_lights
+  party_boolean: input_boolean.hallway_party
+  scene_selector: input_select.kitchen_scene_selector
+  blocker: input_boolean.hallway_blocker
+  trans_max: input_number.hallway_trans_max
+  trans_min: input_number.hallway_trans_min
+  dependencies: Global
+
 tod:
   module: tod
   class: Tod
-  night_input: input_boolean.start_goodnight
+  night_input: binary_sensor.is_nighttime
+  tod_input: input_boolean.tod
   mode_input: input_text.mode
 
 bedroom_motion:
@@ -85,9 +108,9 @@ hallway_motion:
   light_group: light.hallway_lights
   mode_input: input_text.mode
   blocker: input_boolean.hallway_blocker
-  scene_morning: scene.hallway_relax
+  scene_morning: scene.hallway_evening
   scene_day: scene.hallway_bright
-  scene_evening: scene.hallway_relax
+  scene_evening: scene.hallway_evening
   scene_night: scene.hallway_night
   wait_morning: 660
   wait_day: 900
@@ -120,7 +143,7 @@ bathroom_motion:
   min_lx: input_number.bathroom_luminance_level
   light_group: light.bathroom_light
   mode_input: input_text.mode
-  wait_morning: 420
-  wait_day: 420
-  wait_evening: 420
-  wait_night: 420
+  wait_morning: 660
+  wait_day: 660
+  wait_evening: 660
+  wait_night: 660

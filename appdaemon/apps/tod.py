@@ -11,30 +11,33 @@ class Tod(hass.Hass):
             self.log(f'args: {self.args}')
             # required args
             self._night_input = self.args['night_input']
+            self._tod_input = self.args['tod_input']
             self._mode = self.args['mode_input']
             # optional args
             self._morning_start = self.args.get('morning_start', self.rpltime(hour=4))
             self._day_start = self.args.get('day_start', self.rpltime(hour=8))
             self._evening_start = self.args.get('evening_start', self.rpltime(hour=20, minute=30))
             # handlers
-            self.run_in(self.mode_cb, 10)
+            self._tod_handle = self.listen_state(self.mode_cb, self._tod_input, new='on', old='off')
             self._night_handle = self.listen_state(self.night_cb, self._night_input, new='on')
             self._morning_handle = None
             self._day_handle = None
             self._evening_handle = None
             # last registered goodnight
             self._night_trigger_time = None
+            self.create_task(self.create_tasks())
         except (TypeError, ValueError) as e:
             self.log('Incomplete configuration', level="ERROR")
             raise e
 
-    async def mode_cb(self, kwargs):
-        self.log(f'entered')
+    async def create_tasks(self, **kwargs):
+        self.log(f'creating tasks')
         await self.create_task(self.mode_cb_run(tod=self._morning_start, mode='morning'))
         await self.create_task(self.mode_cb_run(tod=self._day_start, mode='day'))
         await self.create_task(self.mode_cb_run(tod=self._evening_start, mode='evening'))
-        await self.sleep(86400)
-        await self.run_in(self.mode_cb, 0)
+
+    async def mode_cb(self, entity, attribute, old, new, kwargs):
+        await self.create_tasks()
         # self._morning_handle = self.run_at(self.morning_cb, self.morning_start_time())
         # self._day_handle = self.run_at(self.day_cb, self.day_start_time())
         # self._evening_handle = self.run_at(self.evening_cb, self.evening_start_time())
@@ -48,9 +51,12 @@ class Tod(hass.Hass):
         if start_time < now:
             start_time = start_time.replace(day=start_time.day+1)
         diff = start_time.timestamp() - now.timestamp()
-        self.log(f'mode: {mode}, diff: {diff}')
+        log_str = f'dt: {str(start_time)}, mode: {mode}, diff: {str(diff)}'
+        self.log(log_str, log='test_log')
+        self.log(log_str)
         await self.sleep(diff)
         await self.tod_cb(mode=mode)
+        self.log(f'MODE_CHANGED to {mode}', log='test_log')
 
     async def tod_cb(self, **kwargs):
         self.set_state(self._mode, state=kwargs['mode'])
@@ -65,12 +71,10 @@ class Tod(hass.Hass):
             res = await self.start_day(tod)
         elif mode == 'evening':
             res = await self.start_evening(tod)
-        self.log(f'res: {res}')
         return res
 
     async def start_morning(self, tod) -> datetime.time:
         res = self.format_t(tod)
-        self.log(f'morning res: {res}')
         return res
 
     async def start_day(self, tod):
@@ -78,11 +82,11 @@ class Tod(hass.Hass):
         end_time = self.format_t(end_time.time())
         limit = self.format_t(tod)
         res = None
-        if limit < end_time:
+        if limit > end_time:
             res = end_time
         else:
             res = limit
-        self.log(f'res: {res}')
+
         return res
 
     async def start_evening(self, tod):
@@ -94,11 +98,11 @@ class Tod(hass.Hass):
             res = end_time
         else:
             res = limit
-        self.log(f'res: {res}')
         return res
 
     def night_cb(self, kwargs):
         self.set_state(self._mode, state='night')
+        self.log(f'MODE_CHANGED to night', log='test_log')
         self._night_trigger_time = datetime.datetime.now()
 
     def format_t(self, t) -> datetime.time:
