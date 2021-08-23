@@ -77,7 +77,8 @@ class Motion(hass.Hass):
         return (self.blocker and await self.get_state(self.blocker) == 'off') or self.blocker is None
 
     async def mode_changed_cb(self, entity, attribute, old, new, kwargs):
-        scene = getattr(self, f'scene_{new}')
+        scene = getattr(self, f'scene_{await self.get_state(self.mode_input)}')
+        self.log(f'mode_changed to scene: {scene}')
         lights_state = await self.get_state(self.light_group)
         if lights_state == 'on':
             await self.turn_on(self.blocker)
@@ -85,7 +86,8 @@ class Motion(hass.Hass):
             await self.sleep(121)
             await self.turn_off(self.blocker)
             await self.sleep(1)
-            diff = getattr(self, f"wait_{new}") - await self.get_now_ts() - self._last_trigger_time 
+            diff = getattr(self, f"wait_{await self.get_state(self.mode_input)}") - await self.get_now_ts() - self._last_trigger_time
+            self.log(f'diff: {diff}')
             await self.motion_run(wait=diff)
 
     @property
