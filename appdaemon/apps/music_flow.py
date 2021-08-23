@@ -16,12 +16,15 @@ class MusicFlow(hass.Hass):
         try:
             self.last_song = None
             self.song_uri = None
-            self.logger = self.get_user_log('test_log')
+            if self.args.get('logger'):
+                self.logger = self.get_user_log(self.args['logger'])
             self.notification_sensor = self.args['last_notification_sensor']
             self.tracker = self.args['device_tracker']
-            self.trigger_play_sensor = self.args['contact_sensor']
+            self.trigger_play_sensor = self.args['start_sensor']
             self.speakers = self.args['speakers']
             self.default_playlist = self.args['default_playlist_id']
+            self.only_alone = self.args.get('only_alone')
+            self.only_alone = False if self.only_alone else True
             self.ytm = YTMusic()
 
             self.home_handle = self.listen_state(self.entered_home_zone_cb, self.tracker, new='home', old='not_home')
@@ -47,7 +50,7 @@ class MusicFlow(hass.Hass):
                 self.log(self.last_song, self.content_id)
 
     def entered_home_zone_cb(self, entity, attribute, old, new, kwargs):
-        if self.is_alone():
+        if (self.only_alone and self.is_alone()) or self.only_alone is False:
             self.prepare_speakers()
             self.play_handle = self.listen_state(
                 self.start_playing_cb,
@@ -62,7 +65,6 @@ class MusicFlow(hass.Hass):
                           media_content_id=self.content_id,
                           media_content_type='track')
         diff = round(self.get_now_ts() - self.last_song[2] / 1000)
-        self.log(f'diff: {diff}')
         self.call_service("media_player/media_seek",
                           entity_id=YTM_PLAYER,
                           seek_position=diff)
@@ -93,8 +95,7 @@ class MusicFlow(hass.Hass):
                 state = self.get_state(tracker)
                 self.log(f'external trackers: {str(tracker)}, state: {state}')
                 alone = (state == 'home') or alone
-        self.log(f'is alone: {(not alone)}')
-        return (not alone)
+        return not alone
 
     @property
     def song_query(self): 
