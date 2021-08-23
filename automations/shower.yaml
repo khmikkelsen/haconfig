@@ -14,6 +14,9 @@
         - condition: state
           entity_id: media_player.bathroom_speaker
           state: 'off'
+        - condition: state
+          entity_id: media_player.bathroom_speaker
+          state: 'paused'
   action:
     - service: media_player.select_source
       data:
