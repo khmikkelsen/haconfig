@@ -1,0 +1,21 @@
+  - platform: wake_on_lan
+    mac: !secret desktop_mac
+    name: "Desktop"
+  - platform: template
+    switches:
+      party:
+        value_template: '{{ states("input_boolean.party") }}'
+        friendly_name: "Party Mode"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.party
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.party
+  - platform: "mqtt"
+    state_topic: "zigbee2mqtt/bathroom_switch"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_off: "OFF"
+    payload_on: "ON"
+    value_template: "{{ value_json.state }}"
+    command_topic: "zigbee2mqtt/bathroom_switch/set"
