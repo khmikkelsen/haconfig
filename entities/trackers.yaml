@@ -1,0 +1,4 @@
+- platform: ping
+  hosts:
+    khm_desktop: 192.168.1.119
+  scan_interval: 30

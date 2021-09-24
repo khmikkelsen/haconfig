@@ -1,0 +1,257 @@
+- title: Home
+  icon: 'mdi:home-variant'
+  path: home
+  cards:
+####################################################
+#                                                  #
+#                     CHIPS                        #
+#                                                  #
+####################################################
+    - cards:
+        - template: edge
+          type: 'custom:button-card'
+        - template: chips_temperature
+          type: 'custom:button-card'
+        - template: chips_localisation_present
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+      type: horizontal-stack
+####################################################
+#                                                  #
+#                     BIG MEDIA                    #
+#                                                  #
+####################################################
+    - cards:
+        - card:
+            cards:
+              - type: 'custom:button-card'
+                name: Media
+                label: '7 devices'
+                template: title
+              - cards:
+                  - template: edge
+                    type: 'custom:button-card'
+                  - artwork: full-cover
+                    entity: media_player.all_speakers_3
+                    style: |
+                      :host {
+                        --ha-card-border-radius: var(--border-radius);
+                        --ha-card-box-shadow: var(--box-shadow);
+                      }
+                    type: 'custom:mini-media-player'
+                  - template: edge
+                    type: 'custom:button-card'
+                type: horizontal-stack
+            type: vertical-stack
+          conditions:
+            - entity: media_player.all_speakers_3
+              state_not: 'off'
+            - entity: media_player.all_speakers_3
+              state_not: 'idle'
+            - entity: media_player.all_speakers_3
+              state_not: 'unavailable'
+          type: conditional
+
+####################################################
+#                                                  #
+#                     LIGHT                        #
+#                                                  #
+####################################################
+        - type: 'custom:button-card'
+          name: Lights
+          label: '10 lights'
+          template: title
+        - cards:
+            - template: edge
+              type: 'custom:button-card'
+            - type: grid
+              columns: 2
+              square: false
+              cards:
+                - entity: light.living_room_lights
+                  name: Living Room
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: light.kitchen_lights
+                  name: Kitchen
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: light.hallway_lights
+                  name: Hallway
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: light.bathroom_lights
+                  name: Bathroom
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: light.bedroom_lights
+                  name: Kristian's
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+          type: horizontal-stack
+      type: vertical-stack
+####################################################
+#                                                  #
+#                     MEDIAS                       #
+#                                                  #
+####################################################
+    - cards:
+        - template: edge
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+        - template: edge
+          type: 'custom:button-card'
+        - type: 'custom:button-card'
+          name: Media
+          label: '6 devices'
+          template: title
+        - type: grid
+          columns: 2
+          square: false
+          cards:
+            - entity: media_player.living_room_tv
+              name: Living Room TV
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+            - entity: media_player.bedroom_tv
+              name: Kristian's TV
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+            - entity: media_player.living_room_speaker
+              name: Living Room Speaker
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+            - entity: media_player.kitchen_speaker
+              name: Kitchen Speaker
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+            - entity: media_player.bathroom_speaker
+              name: Bathroom Speaker
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+            - entity: media_player.bedroom_speaker
+              name: Kristian's Speaker
+              template:
+                - icon_info_bg
+                - media
+              type: 'custom:button-card'
+      type: vertical-stack
+    - cards:
+        - type: 'custom:button-card'
+          name: Living Room
+          label: '6 devices'
+          template: title
+        - cards:
+            - template: edge
+              type: 'custom:button-card'
+            - type: grid
+              columns: 2
+              square: false
+              cards:
+                - entity: light.living_room_lights
+                  name: Lights
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: media_player.living_room_speaker
+                  name: Speaker
+                  template:
+                    - icon_info_bg
+                    - media
+                  type: 'custom:button-card'
+            - template: edge
+              type: 'custom:button-card'
+          type: horizontal-stack
+####################################################
+#                                                  #
+#                     Kitchen                      #
+#                                                  #
+####################################################
+        - type: 'custom:button-card'
+          name: Kitchen
+          label: '4 devices'
+          template: title
+        - cards:
+            - template: edge
+              type: 'custom:button-card'
+            - type: grid
+              columns: 2
+              square: false
+              cards:
+                - entity: light.kitchen_lights
+                  name: Lights
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: media_player.kitchen_speaker
+                  name: Speaker
+                  template:
+                    - icon_info_bg
+                    - media
+                  type: 'custom:button-card'
+            - template: edge
+              type: 'custom:button-card'
+          type: horizontal-stack
+####################################################
+#                                                  #
+#                     Bathroom                     #
+#                                                  #
+####################################################
+        - type: 'custom:button-card'
+          name: Bathroom & Hallway
+          label: '4 devices'
+          template: title
+        - cards:
+            - template: edge
+              type: 'custom:button-card'
+            - type: grid
+              columns: 2
+              square: false
+              cards:
+                - entity: light.kitchen_lights
+                  name: Lights
+                  template:
+                    - icon_info_bg
+                    - light
+                  type: 'custom:button-card'
+                - entity: media_player.kitchen_speaker
+                  name: Speaker
+                  template:
+                    - icon_info_bg
+                    - media
+                  type: 'custom:button-card'
+            - template: edge
+              type: 'custom:button-card'
+          type: horizontal-stack
+####################################################
+      type: vertical-stack

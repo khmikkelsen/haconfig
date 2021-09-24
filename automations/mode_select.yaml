@@ -1,0 +1,58 @@
+- id: '12313123134244'
+  alias: Kristian Mode Select
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.kristian_activity
+    - platform: homeassistant
+      event: start
+    - platform: event
+      event_type: event_template_reloaded
+  variables:
+    activity: "{{ states('sensor.kristian_activity')}}"
+  action:
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.kristian_activity
+      data:
+        option: >
+          {% if activity == 'home' %}
+            Home
+          {% elif activity == 'work' %}
+            Work
+          {% elif activity == 'not_home' %}
+            Away
+          {% elif activity == 'night' %}
+            Night
+          {% else %}
+            Away
+          {% endif %}
+- id: '123132432441235'
+  alias: Solveig Mode Select
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.solveig_activity
+    - platform: homeassistant
+      event: start
+    - platform: event
+      event_type: event_template_reloaded
+  variables:
+    activity: "{{ states('sensor.solveig_activity')}}"
+  action:
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.solveig_activity
+      data:
+        option: >
+          {% if activity == 'home' %}
+            Home
+          {% elif activity == 'work' %}
+            Work
+          {% elif activity == 'not_home' %}
+            Away
+          {% elif activity == 'night' %}
+            Night
+          {% else %}
+            Away
+          {% endif %}

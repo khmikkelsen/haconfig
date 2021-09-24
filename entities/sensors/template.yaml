@@ -1,0 +1,98 @@
+
+- sensor:
+    - name: 'Outside Temperature'
+      state: '{{ states.weather.home_hourly.attributes.temperature | float }}'
+      unit_of_measurement: '°C'
+
+- sensor:
+    - name: 'People Count Home'
+      state: '{{states.person|selectattr("state","equalto","home")|list|length }}'
+
+- sensor:
+    - name: 'People Count Absent'
+      state: '{{states.person|selectattr("state","equalto","not_home")|list|length }}'
+
+- sensor:
+    - name: 'People Count Night'
+      state: >
+        {{[ states.input_boolean.solveigs_gn,
+            states.input_boolean.kristians_gn] | selectattr('state', 'eq', 'on') | list | count}}
+
+- binary_sensor:
+  - name: Is Nighttime
+    state: >
+      {% if is_state('device_tracker.solveigs_iphone', 'home') and is_state('device_tracker.kristians_oneplus', 'home') and
+        is_state('input_boolean.solveigs_gn', 'on') and is_state('input_boolean.kristians_gn', 'on') %}
+        on
+      {% elif is_state('device_tracker.solveigs_iphone', 'home') and not is_state('device_tracker.kristians_oneplus', 'home') and
+        is_state('input_boolean.solveigs_gn', 'on') %}
+        on
+      {% elif is_state('device_tracker.kristians_oneplus', 'home') and not is_state('device_tracker.solveigs_iphone', 'home') and
+        is_state('input_boolean.kristians_gn', 'on') %}
+        on
+      {% else %}
+        off
+      {% endif %}
+
+- trigger:
+    - platform: homeassistant
+      event: start
+    - platform: event
+      event_type: event_template_reloaded
+    - platform: state
+      entity_id:
+        - device_tracker.kristians_oneplus
+        - device_tracker.khm_desktop
+        - input_boolean.kristians_gn
+    - platform: state
+      entity_id:
+        - sensor.oneplus_6t_wifi_connection
+      for: 00:00:05
+  sensor:
+  - name: 'kristian_activity'
+    unique_id: '1235443'
+    state: >
+      {% if states('device_tracker.kristians_oneplus') == 'work' or
+      states('device_tracker.kristians_oneplus') == 'Work' or
+      states('device_tracker.khm_desktop') == 'home' %}
+        work
+      {% elif states('input_boolean.kristians_gn') == 'on' %}
+        night
+      {% elif states('device_tracker.kristians_oneplus') == 'home' and
+      states('sensor.oneplus_6t_wifi_connection') in ['Wu Tang WLAN 5GHz', 'Wu Tang WLAN'] %}
+        home
+      {% elif states('device_tracker.kristians_oneplus') == 'not_home' %}
+        not_home
+      {% else %}
+        not_home
+      {% endif %}
+- trigger:
+    - platform: homeassistant
+      event: start
+    - platform: event
+      event_type: event_template_reloaded
+    - platform: state
+      entity_id:
+        - device_tracker.solveigs_iphone
+        - input_boolean.solveigs_gn
+    - platform: state
+      entity_id:
+        - sensor.solveig_hansine_s_iphone_ssid_2
+      for: 00:00:05
+  sensor:
+    - name: 'solveig_activity'
+      unique_id: '12399231'
+      state: >
+        {% if states('device_tracker.solveigs_iphone') == 'work' or
+           states('device_tracker.solveigs_iphone') == 'Work' %}
+          work
+        {% elif states('input_boolean.kristians_gn') == 'on' %}
+          night
+        {% elif states('device_tracker.solveigs_iphone') == 'home' %}
+          home
+        {% elif states('device_tracker.solveigs_iphone') == 'not_home' %}
+          not_home
+        {% else %}
+          not_home
+        {% endif %}
+

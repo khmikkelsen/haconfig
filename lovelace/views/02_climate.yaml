@@ -1,0 +1,190 @@
+  - title: temperature
+    icon: 'mdi:thermometer'
+    path: temperature
+    cards:
+      - cards:
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - template: chips_return
+                type: 'custom:button-card'
+              - template: chips_temperature
+                type: 'custom:button-card'
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+          - type: 'custom:button-card'
+            name: Climate
+            template: title
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - type: weather-forecast
+                style: |
+                  ha-card {
+                    box-shadow: var(--box-shadow);
+                    border-radius: 20px;
+                    padding: 12px !important;
+                  }
+                  .icon-image{
+                    min-width: 42px !important;
+                    margin-right: 12px !important;
+                  }
+                  .icon-image > *{
+                    height: 42px !important;
+                    width: 42px;
+                    flex: 0 0 42px !important;
+                  }
+                  .state {
+                    font-size: 14px !important;
+                    font-weight: bold;
+                  }
+                  .name{
+                    font-weight: bolder;
+                    font-size: 12px !important;
+                    filter: opacity(40%);
+                    color: var(--primary-text-color) !important;
+                  }
+                  .temp{
+                    font-size: 14px !important;
+                    font-weight: bold;
+                    margin-right: 14px !important;
+                  }
+                  .attribute{
+                    font-size: 12px !important;
+                    font-weight: bolder;
+                    filter: opacity(40%);
+                    color: var(--primary-text-color) !important;
+                  }
+                  span{
+                    font-size: 14px !important;
+                    font-weight: bold;
+                  }
+                entity: weather.home
+                show_forecast : false
+                name: Forecast
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+          - type: 'custom:button-card'
+            label: 'Living Room'
+            template: title
+
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - type: grid
+                columns: 2
+                square: false
+                cards:
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.living_room_sensor_temperature"
+                      color: "var(--google-red)"
+                      name: "Temperature"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.living_room_sensor_illuminance_lux"
+                      color: "var(--google-yellow)"
+                      name: "Luminance"
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+          - type: 'custom:button-card'
+            label: 'Kitchen'
+            template: title
+
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - type: grid
+                columns: 2
+                square: false
+                cards:
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.kitchen_sensor_temperature"
+                      color: "var(--google-red)"
+                      name: "Temperature"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.kitchen_sensor_illuminance_lux"
+                      color: "var(--google-yellow)"
+                      name: "Luminance"
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+          - type: 'custom:button-card'
+            label: 'Bathroom'
+            template: title
+
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - type: grid
+                columns: 2
+                square: false
+                cards:
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.shower_sensor_temperature"
+                      color: "var(--google-red)"
+                      name: "Temperature"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.bathroom_sensor_illuminance_lux"
+                      color: "var(--google-yellow)"
+                      name: "Luminance"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.shower_sensor_humidity"
+                      color: "var(--google-blue)"
+                      name: "Humidity"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.shower_sensor_pressure"
+                      color: "var(--google-green)"
+                      name: "Pressure"
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+          - type: 'custom:button-card'
+            label: 'Kristian'
+            template: title
+
+          - cards:
+              - template: edge
+                type: 'custom:button-card'
+              - type: grid
+                columns: 2
+                square: false
+                cards:
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.bedroom_sensor_temperature"
+                      color: "var(--google-red)"
+                      name: "Temperature"
+                  - type: 'custom:button-card'
+                    template: graph
+                    variables:
+                      entity: "sensor.bedroom_sensor_illuminance_lux"
+                      color: "var(--google-yellow)"
+                      name: "Luminance"
+              - template: edge
+                type: 'custom:button-card'
+            type: horizontal-stack
+
+        type: vertical-stack

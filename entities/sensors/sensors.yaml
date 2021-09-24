@@ -1,0 +1,74 @@
+####################################################
+#                                                  #
+#                      KRISTIAN                    #
+#                                                  #
+####################################################
+- platform: history_stats
+  name: Kristian Home
+  entity_id: input_select.kristian_activity
+  state: 'Home'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Kristian Away
+  entity_id: input_select.kristian_activity
+  state: 'Away'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Kristian Work
+  entity_id: input_select.kristian_activity
+  state: 'Work'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Kristian Night
+  entity_id: input_select.kristian_activity
+  state: 'Night'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+####################################################
+#                                                  #
+#                      SOLVEIG                     #
+#                                                  #
+####################################################
+- platform: history_stats
+  name: Solveig Home
+  entity_id: input_select.solveig_activity
+  state: 'Home'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Solveig Away
+  entity_id: input_select.solveig_activity
+  state: 'Home'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Solveig Work
+  entity_id: input_select.solveig_activity
+  state: 'Work'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time
+- platform: history_stats
+  name: Solveig Night
+  entity_id: input_select.solveig_activity
+  state: 'Night'
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  duration:
+    hours: 24
+  type: time

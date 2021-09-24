@@ -1,0 +1,104 @@
+- title: Localisation
+  icon: 'mdi:map-marker'
+  path: localisation
+  cards:
+    - cards:
+      - cards:
+          - template: edge
+            type: 'custom:button-card'
+          - template: chips_return
+            type: 'custom:button-card'
+          - template: chips_localisation_present
+            type: 'custom:button-card'
+          - template: chips_localisation_absent
+            type: 'custom:button-card'
+          - template: chips_localisation_night
+            type: 'custom:button-card'
+          - template: edge
+            type: 'custom:button-card'
+        type: horizontal-stack
+
+####################################################
+#                                                  #
+#                   LOCALISATION                   #
+#                                                  #
+####################################################
+
+      - type: 'custom:button-card'
+        name: Location
+        label: '2 persons'
+        template: title
+      - cards:
+          - template: edge
+            type: 'custom:button-card'
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - entity: input_select.kristian_activity
+                variables:
+                  person: "kristian"
+                template:
+                  - icon_info_bg
+                  - person-kristian
+                name: Kristian
+                type: 'custom:button-card'
+              - entity: input_select.solveig_activity
+                template:
+                  - icon_info_bg
+                  - person-solveig
+                name: Solveig
+                type: 'custom:button-card'
+
+          - template: edge
+            type: 'custom:button-card'
+        type: horizontal-stack
+####################################################
+#                                                  #
+#                   ACTIVITIES                     #
+#                                                  #
+####################################################
+      - type: custom:state-switch
+        entity: user
+        default: default
+        states:
+          Kristian:
+            type: vertical-stack
+            cards:
+              - type: 'custom:button-card'
+                name: Activity
+                template: title
+              - cards:
+                  - template: edge
+                    type: 'custom:button-card'
+                  - entity: sensor.kristian_home
+                    name: 'Home'
+                    template: scene_blue
+                    variables:
+                      state: "Home"
+                    type: 'custom:button-card'
+                  - entity: sensor.kristian_away
+                    template: scene_green
+                    name: 'Away'
+                    variables:
+                      state: "Away"
+                    type: 'custom:button-card'
+                  - entity: sensor.kristian_work
+                    template: scene_red
+                    name: 'Work'
+                    variables:
+                      state: "Work"
+                    type: 'custom:button-card'
+                  - entity: sensor.kristian_night
+                    name: 'Night'
+                    variables:
+                      state: "Night"
+                    template: scene_yellow
+                    tap_action:
+                      action: more-info
+                      entity: input_boolean.kristians_gn
+                    type: 'custom:button-card'
+                  - template: edge
+                    type: 'custom:button-card'
+                type: horizontal-stack
+      type: vertical-stack
