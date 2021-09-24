@@ -30,6 +30,8 @@ class Dimmer(hass.Hass):
         warnings.filterwarnings("error")
         try:
             self.log(f'args: {self.args}')
+            if self.args.get('logger'):
+                self.logger = self.get_user_log(self.args['logger'])
             self._dimmer = self.args['dimmer_switch']
             self._light_group = self.args['light_group']
             self.party_state = self.args['party_boolean']
@@ -49,58 +51,92 @@ class Dimmer(hass.Hass):
             self.log('Incomplete configuration', level="ERROR")
             raise e
         self.apps = self.all_apps_of_me()
-        self.dimmer_handler = self.listen_state(self.dimmer_button_pressed, self._dimmer, attribute='action')
+        #self.blocker_off_handler = self.listen_state(self.lights_off, self._light_group, new='off')
+        #self.dimmer_handler = self.listen_state(self.dimmer_button_pressed, self._dimmer, attribute='action')
         self.scene_handler = self.listen_state(self.scene_selector_changed, self._scene_selector)
+
+        self.hold_ts = None
+
+        self.register_constraint('is_party')
+        # dimmer actions - party off
+        self.poff_on_press_h = self.listen_state(self.poff_on_press, self._dimmer, attribute='action', new='on_press', is_party='off')
+        self.poff_up_press_h = self.listen_state(self.poff_up_press, self._dimmer, attribute='action', new='up_press', is_party='off')
+        self.poff_down_press_h = self.listen_state(self.poff_down_press, self._dimmer, attribute='action', new='down_press', is_party='off')
+        self.poff_off_press_h = self.listen_state(self.poff_off_press, self._dimmer, attribute='action', new='off_press', is_party='off')
+        self.poff_off_hold_h = self.listen_state(self.poff_off_hold, self._dimmer, attribute='action', new='off_hold', is_party='off')
+
+        # dimmer actions - party on
+        self.pon_on_press_h = self.listen_state(self.pon_on_press, self._dimmer, attribute='action', new='on_press', is_party='on')
+        self.pon_up_press_h = self.listen_state(self.pon_up_press, self._dimmer, attribute='action', new='up_press', is_party='on')
+        self.pon_down_press_h = self.listen_state(self.pon_down_press, self._dimmer, attribute='action', new='down_press', is_party='on')
+        self.pon_off_press_h = self.listen_state(self.pon_off_press, self._dimmer, attribute='action', new='off_press', is_party='on')
+
+        # party
         self.party_on_handler = self.listen_state(self.party_on, self.party_state, old='off', new='on')
         self.party_off_handler = self.listen_state(self.party_off, self.party_state, old='on', new='off')
 
-    def dimmer_button_pressed(self, entity, attribute, old, new, kwargs):
-        party_state = self.get_state(self.party_state)
-        payload = self.get_state(entity, attribute)
-        if len(payload) > 0:
-            self.log(f'payload: {payload}')
-
-        if party_state == 'off':
-            if payload == 'on_press':
-                self.toggle(self._light_group)
-            elif payload == 'up_press':
-                self.increase_brightness()
-            elif payload == 'down_press':
-                self.decrease_brightness()
-            elif payload == 'off_press':
-                self.save_scene()
-                self.create_task(self.next_scene())
-            elif payload == 'off_hold':
-                self.strobe_lights()
-                self.check_call_on_slaves('strobe_lights')
-            elif payload == 'off_hold_release':
-                self.toggle_party_state()
-                self.check_call_on_slaves('toggle_party_state')
-
-
-        elif party_state == 'on':
-            if payload == 'on_press':
-                self.toggle_party_state()
-                self.check_call_on_slaves('toggle_party_state')
-            elif payload == 'up_press':
-                self.increase_transition()
-                self.check_call_on_slaves('increase_transition')
-            elif payload == 'down_press':
-                self.decrease_transition()
-                self.check_call_on_slaves('decrease_transition')
-            elif payload == 'off_press':
-                self.next_party_scene()
-                self.check_call_on_slaves('next_party_scene')
-            
+    def is_party(self, value):
+        if value == 'off':
+            if self.get_state(self.party_state) == 'off':
+                return True
+        elif value == 'on':
+            if self.get_state(self.party_state) == 'on':
+                return True
         else:
-            raise ValueError(f'Incorrect state: {party_state}')
+            return False
 
-        if self.blocker:
-            after_state = self.get_state(self._light_group)
-            if after_state == 'on':
-                self.turn_on(self.blocker)
-            elif after_state == 'off':
-                self.turn_off(self.blocker)
+    def poff_on_press(self, entity, attribute, old, new, kwargs):
+        self.toggle(self._light_group)
+        new_state = self.get_state(self._light_group)
+        self.check_state()
+
+    def pon_on_press(self, entity, attribute, old, new, kwargs):
+        self.toggle_party_state()
+        self.check_call_on_slaves('toggle_party_state')
+    
+    def poff_up_press(self, entity, attribute, old, new, kwargs):
+        self.increase_brightness()
+        new_state = self.get_state(self._light_group)
+        self.check_state()
+    
+    def pon_up_press(self, entity, attribute, old, new, kwargs):
+        self.increase_transition()
+        self.check_call_on_slaves('increase_transition')
+
+    def poff_down_press(self, entity, attribute, old, new, kwargs):
+        self.decrease_brightness()
+        new_state = self.get_state(self._light_group)
+        self.check_state()
+
+    def pon_down_press(self, entity, attribute, old, new, kwargs):
+        self.decrease_transition()
+        self.check_call_on_slaves('decrease_transition')
+
+    def poff_off_press(self, entity, attribute, old, new, kwargs):
+        self.create_task(self.next_scene())
+        self.check_state()
+
+    def pon_off_press(self, entity, attribute, old, new, kwargs):
+        self.next_party_scene()
+        self.check_call_on_slaves('next_party_scene')
+    
+    def poff_off_hold(self, entity, attribute, old, new, kwargs):
+        self.strobe_lights()
+        if self.hold_ts:
+            self.log(f'{self.hold_ts}')
+            if self.hold_ts + 2 < self.get_now_ts():
+                self.toggle_party_state()
+                self.check_call_on_slaves('toggle_party_state')
+        else:
+            self.log('no hold')
+            self.hold_ts = self.get_now_ts()
+            self.create_task(self.reset_hold())
+        self.check_call_on_slaves('strobe_lights')
+
+    async def reset_hold(self, **kwargs):
+        await self.sleep(5)
+        self.hold_ts = None
+        self.log('hold reset')
             
     def check_call_on_slaves(self, attr):
         if self._master:
@@ -110,6 +146,17 @@ class Dimmer(hass.Hass):
     def toggle_party_state(self):
         self.toggle(self.party_state)
 
+    def check_state(self):
+        self.create_task(self.check_state_task())
+    
+    async def check_state_task(self, **kwargs):
+        await self.sleep(0.7)
+        state = await self.get_state(self._light_group)
+        if state == 'on':
+            await self.turn_on(self.blocker)
+        elif state == 'off':
+            await self.turn_off(self.blocker)
+
     def set_inputs(self):
         choice = self.party_scene
         trans_max = choice.get('trans_max', 4)
@@ -117,10 +164,11 @@ class Dimmer(hass.Hass):
         self.set_value(self._trans_max, trans_max)
         self.set_value(self._trans_min, trans_min)
 
-    def party_on(self, entity, attribute, old, new, kwargs):
-        self.run_sequence([{'sleep': 0.5}])
+    async def party_on(self, entity, attribute, old, new, kwargs):
+        await self.sleep(0.5)
+        await self.save_scene_async()
         self.set_inputs()
-        self.create_handles()
+        await self.create_handles_async()
 
     async def party_scene_run(self, **kwargs):
         self.log(f'entered with state: {await self.get_state(self.party_state)}')
@@ -294,6 +342,9 @@ class Dimmer(hass.Hass):
     def get_lights(self) -> List[str]:
         return self.get_state(self._light_group, attribute='entity_id')
 
+    async def get_lights_async(self) -> List[str]:
+        return await self.get_state(self._light_group, attribute='entity_id')
+
     def strobe_lights(self):
         self.turn_on(self._light_group, flash="short")
 
@@ -306,15 +357,31 @@ class Dimmer(hass.Hass):
         id_ = id_.split('.')[1]
         self.log(f'scene id: {id_}')
         return id_
+    
+    async def get_scene_id_async(self) -> str:
+        tmp = await self.get_state(self._light_group, attribute='all') 
+        id_ = tmp.get('entity_id') + 'party'
+        id_ = id_.split('.')[1]
+        self.log(f'scene id: {id_}')
+        return id_
 
     def save_scene(self):
         self.call_service("scene/create",
-                          scene_id=self.get_scene_id(),
-                          snapshot_entities=self.get_lights())
+                    scene_id=self.get_scene_id(),
+                    snapshot_entities=self.get_lights())
+
+    async def save_scene_async(self):
+        self.call_service("scene/create",
+                    scene_id=await self.get_scene_id_async(),
+                    snapshot_entities=await self.get_lights_async())
 
     def create_handles(self):
         for light in self.get_lights():
             self._handles.append(self.create_task(self.party_scene_run(light=light, scene=self.party_scene)))
+
+    async def create_handles_async(self):
+        for light in await self.get_lights_async():
+            self._handles.append(await self.create_task(self.party_scene_run(light=light, scene=self.party_scene)))
 
     def _cancel_handles(self):
         for h in self._handles:
@@ -330,6 +397,9 @@ class Dimmer(hass.Hass):
                 lst.append(obj)
         self.log(str(lst), log='test_log')
         return lst
+    
+    def lights_off(self, entity, attribute, old, new, kwargs):
+        self.turn_off(self.blocker)
 
     @property
     def party_scenes(self):
