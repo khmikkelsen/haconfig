@@ -19,3 +19,15 @@ living_room_selector:
   - living_room_focus
   - living_room_night
   initial: living_room_bright
+kristian_activity:
+  options:
+  - Home
+  - Work
+  - Night
+  - Away
+solveig_activity:
+  options:
+  - Home
+  - Work
+  - Night
+  - Away

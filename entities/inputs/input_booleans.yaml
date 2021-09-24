@@ -25,6 +25,8 @@ hallway_party:
   name: Party Mode
 has_wakeup:
   name: Wakeup
+solveig_wakeup:
+  name: Solveig Wakeup
 tod:
   name: Time of day
 solveigs_gn:
