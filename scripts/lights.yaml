@@ -12,14 +12,13 @@ bedroom_goodnight:
       target:
         entity_id: input_boolean.bedroom_goodnight
     - service: input_boolean.turn_on
-      target:
-        entity_id: input_boolean.bedroom_blocker
+      entity_id: input_boolean.bedroom_blocker
     - service: scene.turn_on
       target:
         entity_id: scene.bedroom_goodnight
       data:
         transition: 1
-    - delay: 1
+    - delay: 2
     - service: light.turn_off
       data:
         entity_id: light.bedroom_lights
@@ -36,147 +35,39 @@ bedroom_goodnight:
     - service: media_player.turn_off
       target:
         entity_id: media_player.living_room_tv
-lights_partying_on:
-  alias: Lights partying on
+bedroom_morning:
+  alias: Bedroom Morning
   sequence:
-    - service: scene.create
+    - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.bedroom_sensor_occupancy
+        to: 'on'
+    - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.living_room_sensor_occupancy
+        to: 'on'
+    - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.hallway_sensor_occupancy
+        to: 'on'
+    - wait_for_trigger: 
+      - platform: state
+        entity_id:
+          - binary_sensor.bathroom_sensor_occupancy
+        to: 'on'
+    - service: script.set_hue_sensitivity
       data:
-        scene_id: apartmentparty
-        snapshot_entities:
-        - light.bed_light
-        - light.tall_light
-        - light.bedroom_spot_light
-        - light.dining_table_light
-        - light.round_light
-        - light.hallway_light
-        - light.kitchen_spot_light_1
-        - light.kitchen_spot_light_2
-    - delay: 
-        seconds: "0.5"
-    - service: script.turn_on
-      entity_id: script.lights_partying
-
-lights_partying_off:
-  alias: Lights partying off
-  sequence:
-    - service: scene.turn_on
+        mode: 'high'
+    - service: light.turn_off
       target:
-        entity_id: scene.apartmentparty
-lights_partying:
-  mode: restart
-  sequence:
-    - repeat:
-        while:
-          - condition: state
-            entity_id: input_boolean.party
-            state: 'on'
-        sequence:
-          - service: light.turn_on
-            data:
-              entity_id: light.hallway_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.dining_table_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.round_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.bedroom_spot_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.bed_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.tall_light
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.kitchen_spot_light_1
-              rgb_color: >
-                {% set n = (range(0, 1)|random)|int %}
-                {% if n == 0 %}
-                  {% set rgb = [(range(190, 255)|random)|int,0, 0] %}
-                  {{ rgb }}
-                {% else %}
-                  {% set rgb = [255, 255, 255] %}
-                  {{ rgb }}
-                {% endif %}
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - service: light.turn_on
-            data:
-              entity_id: light.kitchen_spot_light_2
-              rgb_color: ['{{ (range(0, 255)|random) }}',
-                          '{{ (range(0, 255)|random) }}',
-                          '{{ (range(0, 255)|random) }}']
-              
-              brightness: '{{ (range(180, 255)|random) }}'
-              transition: '{{ (range(states("input_number.trans_min") | int, states("input_number.trans_max") | int)|random) }}'
-          - delay: 
-              seconds: "{{ states('input_number.trans_min') | int }}"
+        entity_id: light.bedroom_lights
+    - service: input_number.set_value
+      entity_id: input_number.alarm_volume
+      data:
+        value: 0.4
+    - service: automation.turn_off
+      entity_id: automation.gtfo_bed
+
