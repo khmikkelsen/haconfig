@@ -1,27 +1,36 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+
+
+frontend:
+  themes: !include lovelace_configuration/themes.yaml
+
 # Text to speech
 tts:
   - platform: google_translate
 
-group: !include groups.yaml
-light: !include light.yaml
-light groups: !include light-groups.yaml
+group: !include entities/groups.yaml
+light: !include entities/lights/light.yaml
+light groups: !include entities/lights/light-groups.yaml
 automation manual: !include_dir_merge_list automations/
 automation ui: !include automations.yaml
 script: !include_dir_merge_named scripts/
-scene: !include scenes.yaml
-binary_sensor: !include sensors/binary_sensors.yaml
-input_boolean: !include inputs/input_booleans.yaml
-input_number: !include inputs/input_numbers.yaml
-input_select: !include inputs/input_selects.yaml
-input_text: !include inputs/input_texts.yaml
+scene: !include entities/scenes.yaml
+sensor: !include entities/sensors/sensors.yaml
+binary_sensor: !include entities/sensors/binary_sensors.yaml
+input_boolean: !include entities/inputs/input_booleans.yaml
+input_number: !include entities/inputs/input_numbers.yaml
+input_select: !include entities/inputs/input_selects.yaml
+input_text: !include entities/inputs/input_texts.yaml
+switch: !include entities/switches.yaml
+template: !include entities/sensors/template.yaml
+device_tracker: !include entities/trackers.yaml
 
 lovelace:
-  resources:
-    - url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
-      type: module
+  mode: yaml
+  resources: !include lovelace/resources/resources.yaml
+
 
 wake_on_lan:
 
@@ -49,6 +58,8 @@ google_assistant:
     - input_boolean
     - light
   entity_config:
+    light.bathroom_light:
+      expose: true
     light.bedroom_spot_light:
       expose: true
     light.tall_light:
@@ -108,26 +119,7 @@ folder_watcher:
 homeassistant:
   allowlist_external_dirs:
     - "/config/blueprints"
+  customize: !include customize.yaml
 
-switch:
-  - platform: wake_on_lan
-    mac: !secret desktop_mac
-    name: "Desktop"
-  - platform: template
-    switches:
-      party:
-        value_template: '{{ states("input_boolean.party") }}'
-        friendly_name: "Party Mode"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.party
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.party
-  - platform: "mqtt"
-    state_topic: "zigbee2mqtt/bathroom_switch"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    payload_off: "OFF"
-    payload_on: "ON"
-    value_template: "{{ value_json.state }}"
-    command_topic: "zigbee2mqtt/bathroom_switch/set"
+
+

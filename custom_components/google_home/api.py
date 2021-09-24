@@ -92,6 +92,7 @@ class GlocaltokensApiClient:
             google_devices = await self.hass.async_add_executor_job(_get_google_devices)
             self.google_devices = [
                 GoogleHomeDevice(
+                    device_id=device.device_id,
                     name=device.device_name,
                     auth_token=device.local_auth_token,
                     ip_address=device.ip_address,
@@ -101,10 +102,10 @@ class GlocaltokensApiClient:
             ]
         return self.google_devices
 
-    async def get_android_id(self) -> str | None:
+    async def get_android_id(self) -> str:
         """Generate random android_id"""
 
-        def _get_android_id() -> str | None:
+        def _get_android_id() -> str:
             return self._client.get_android_id()
 
         return await self.hass.async_add_executor_job(_get_android_id)
@@ -128,7 +129,7 @@ class GlocaltokensApiClient:
                 _LOGGER.debug(
                     (
                         "Failed to fetch timers/alarms information "
-                        "from device %s. We could not determine it's IP address, "
+                        "from device %s. We could not determine its IP address, "
                         "the device is either offline or is not compatible "
                         "Google Home device. Will try again later."
                     ),
@@ -137,9 +138,7 @@ class GlocaltokensApiClient:
 
         coordinator_data = await asyncio.gather(
             *[
-                self.collect_data_from_endpoints(
-                    device=device,
-                )
+                self.collect_data_from_endpoints(device)
                 for device in devices
                 if device.ip_address and device.auth_token
             ]
@@ -167,11 +166,15 @@ class GlocaltokensApiClient:
             if JSON_TIMER in response and JSON_ALARM in response:
                 device.set_timers(cast(List[TimerJsonDict], response[JSON_TIMER]))
                 device.set_alarms(cast(List[AlarmJsonDict], response[JSON_ALARM]))
-                _LOGGER.debug("Successfully retrieved data from %s.", device.name)
+                _LOGGER.debug(
+                    "Successfully retrieved alarms and timers from %s. Response: %s",
+                    device.name,
+                    response,
+                )
             else:
                 _LOGGER.error(
                     (
-                        "Failed to parse fetched data for device %s - "
+                        "Failed to parse fetched alarms and timers for device %s - "
                         "API returned unknown json structure. "
                         "Received = %s"
                     ),
@@ -293,7 +296,10 @@ class GlocaltokensApiClient:
                 device.set_do_not_disturb(enabled)
             else:
                 _LOGGER.debug(
-                    "Response not expected from Google Home device %s - %s",
+                    (
+                        "Unexpected response from Google Home device '%s' "
+                        "when fetching DND status - %s"
+                    ),
                     device.name,
                     response,
                 )
@@ -331,7 +337,7 @@ class GlocaltokensApiClient:
             polling=polling,
         )
         if response:
-            if JSON_NOTIFICATIONS_ENABLED in response:
+            if JSON_ALARM_VOLUME in response:
                 volume_raw = str(response[JSON_ALARM_VOLUME])
                 loaded_volume = float(volume_raw)
                 _LOGGER.debug(
@@ -344,7 +350,10 @@ class GlocaltokensApiClient:
                 device.set_alarm_volume(loaded_volume)
             else:
                 _LOGGER.debug(
-                    "Response not expected from Google Home device %s - %s",
+                    (
+                        "Unexpected response from Google Home device '%s' "
+                        "when fetching alarm volume setting - %s"
+                    ),
                     device.name,
                     response,
                 )

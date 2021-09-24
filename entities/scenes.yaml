@@ -674,7 +674,7 @@
       - color_temp
       - xy
       color_mode: color_temp
-      brightness: 79
+      brightness: 138
       color_temp: 409
       color:
         x: 0.4824
@@ -700,7 +700,7 @@
       - color_temp
       - xy
       color_mode: color_temp
-      brightness: 54
+      brightness: 112
       color_temp: 443
       color:
         x: 0.5006

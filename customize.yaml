@@ -1,2 +1,36 @@
+####################################################
+#                                                  #
+#                      KRISTIAN                    #
+#                                                  #
+####################################################
 person.khm:
   name: Kristian
+input_select.kristian_activity:
+  icon: 'mdi:face'
+sensor.kristian_activity:
+  icon: 'mdi:face'
+sensor.kristian_home:
+  icon: 'mdi:home'
+sensor.kristian_away:
+  icon: 'mdi:walk'
+sensor.kristian_work:
+  icon: 'mdi:briefcase'
+sensor.kristian_night:
+  icon: 'mdi:moon-waning-crescent'
+####################################################
+#                                                  #
+#                      SOLVEIG                     #
+#                                                  #
+####################################################
+sensor.solveig_activity:
+  icon: 'mdi:face-woman'
+input_select.solveig_activity:
+  icon: 'mdi:face-woman'
+sensor.solveig_home:
+  icon: 'mdi:home'
+sensor.solveig_away:
+  icon: 'mdi:walk'
+sensor.solveig_work:
+  icon: 'mdi:briefcase'
+sensor.solveig_night:
+  icon: 'mdi:moon-waning-crescent'
