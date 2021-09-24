@@ -4,7 +4,7 @@
   trigger:
     - platform: numeric_state
       entity_id: sensor.shower_sensor_humidity
-      above: 67
+      above: 82
   condition:
     - condition: or
       conditions:
@@ -45,7 +45,6 @@
           {% else %}
             playlist
           {% endif %}
-    - wait_template: "{{ states('sensor.shower_sensor_humidity') | int > 80 }}"
     - wait_template: "{{ states('sensor.shower_sensor_humidity') | int < 80 }}"
     - service: media_player.media_stop
       data:
