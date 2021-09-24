@@ -1,0 +1,764 @@
+- id: '1619316784209'
+  name: Hallway Bright
+  entities:
+    light.hallway_lights:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - channel_change
+      - finish_effect
+      - okay
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 180
+      color_temp: 358
+      entity_id:
+      - light.hallway_light
+      friendly_name: Hallway Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
+  icon: mdi:lightbulb
+- id: '1620257301056'
+  name: Kitchen Bright
+  entities:
+    light.kitchen_spot_light_1:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 250
+      color_temp: 334
+      color:
+        x: 0.4376
+        y: 0.4043
+      linkquality: 54
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Kitchen Spot Light 1
+      supported_features: 63
+    light.kitchen_spot_light_2:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 187
+      color_temp: 343
+      color:
+        x: 0.4435
+        y: 0.4062
+      linkquality: 45
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Kitchen Spot Light 2
+      supported_features: 63
+- id: '1620257629772'
+  name: Kitchen Night
+  entities:
+    light.kitchen_spot_light_1:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 129
+      hs_color:
+      - 36.207
+      - 68.235
+      rgb_color:
+      - 255
+      - 186
+      - 81
+      xy_color:
+      - 0.507
+      - 0.414
+      color_temp: 458
+      color:
+        x: 0.507659071576558
+        y: 0.415138257686807
+      linkquality: 54
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Kitchen Spot Light 1
+      supported_features: 63
+    light.kitchen_spot_light_2:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 188
+      hs_color:
+      - 36.647
+      - 65.49
+      rgb_color:
+      - 255
+      - 190
+      - 88
+      xy_color:
+      - 0.498
+      - 0.415
+      color_temp: 439
+      color:
+        x: 0.498625556586457
+        y: 0.415262788839981
+      linkquality: 27
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Kitchen Spot Light 2
+      supported_features: 63
+- id: '1621010866209'
+  name: Bedroom Bright
+  entities:
+    light.bedroom_spot_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 253
+      color_temp: 372
+      color:
+        x: 0.4615
+        y: 0.411
+      linkquality: 111
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bedroom Spot Light
+      supported_features: 63
+    light.bed_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 252
+      color_temp: 361
+      linkquality: 153
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bed Light
+      supported_features: 63
+    light.tall_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 252
+      color_temp: 346
+      linkquality: 78
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Tall Light
+      supported_features: 63
+- id: '1621010979581'
+  name: Living Room Bright
+  entities:
+    light.living_room_lights:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - channel_change
+      - finish_effect
+      - okay
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 241
+      color_temp: 366
+      entity_id:
+      - light.dining_table_light
+      - light.round_light
+      friendly_name: Living Room Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
+  icon: mdi:lightbulb
+- id: '1624410599000'
+  name: Bedroom Night
+  entities:
+    light.bed_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 51
+      color_temp: 470
+      linkquality: 153
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bed Light
+      supported_features: 63
+    light.tall_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 64
+      color_temp: 456
+      linkquality: 60
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Tall Light
+      supported_features: 63
+    light.bedroom_spot_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      brightness: 3
+      color:
+        x: 0.3972
+        y: 0.3865
+      color_mode: color_temp
+      color_temp: 274
+      linkquality: 123
+      state: 'off'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bedroom Spot Light
+      supported_features: 63
+  icon: mdi:moon-waning-crescent
+- id: '1624478152734'
+  name: Bedroom Relax
+  entities:
+    light.bed_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 171
+      color_temp: 405
+      linkquality: 153
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bed Light
+      supported_features: 63
+    light.bedroom_spot_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 169
+      color_temp: 429
+      color:
+        x: 0.4928
+        y: 0.4151
+      linkquality: 117
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bedroom Spot Light
+      supported_features: 63
+    light.tall_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 166
+      color_temp: 390
+      linkquality: 72
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Tall Light
+      supported_features: 63
+- id: '1624478483142'
+  name: Bedroom Focus
+  entities:
+    light.bed_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp: 260
+      linkquality: 153
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bed Light
+      supported_features: 63
+    light.bedroom_spot_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp: 274
+      color:
+        x: 0.3972
+        y: 0.3865
+      linkquality: 135
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bedroom Spot Light
+      supported_features: 63
+    light.tall_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp: 257
+      linkquality: 81
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Tall Light
+      supported_features: 63
+  icon: mdi:eye
+- id: '1624532014971'
+  name: Kitchen Focus
+  entities:
+    light.kitchen_lights:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - channel_change
+      - finish_effect
+      - okay
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 251
+      color_temp: 267
+      entity_id:
+      - light.kitchen_spot_light_1
+      - light.kitchen_spot_light_2
+      friendly_name: Kitchen Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
+  icon: mdi:eye
+- id: '1624554662065'
+  name: Bedroom Goodnight
+  entities:
+    light.bed_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 87
+      hs_color:
+      - 37.882
+      - 100
+      rgb_color:
+      - 255
+      - 161
+      - 0
+      xy_color:
+      - 0.569
+      - 0.411
+      color:
+        x: 0.569
+        y: 0.411
+      color_temp: 563
+      linkquality: 81
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bed Light
+      supported_features: 63
+    light.bedroom_spot_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      brightness: 253
+      color:
+        x: 0.3972
+        y: 0.3865
+      color_mode: color_temp
+      color_temp: 274
+      linkquality: 87
+      state: 'off'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Bedroom Spot Light
+      supported_features: 63
+    light.tall_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 51
+      color_temp: 500
+      color:
+        x: 0.5267
+        y: 0.4133
+      linkquality: 114
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Tall Light
+      supported_features: 63
+  icon: mdi:sleep
+- id: '1624572689264'
+  name: Hallway Evening
+  entities:
+    light.hallway_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 84
+      color_temp: 390
+      color:
+        x: 0.4717
+        y: 0.4129
+      linkquality: 42
+      state: 'on'
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Hallway Light
+      supported_features: 63
+- id: '1624580663352'
+  name: Living Room Relax
+  entities:
+    light.dining_table_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 151
+      color_temp: 411
+      color:
+        x: 0.4834
+        y: 0.4144
+      linkquality: 129
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Dining Table Light
+      supported_features: 63
+      state: 'on'
+    light.round_light:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 79
+      color_temp: 409
+      color:
+        x: 0.4824
+        y: 0.4143
+      linkquality: 99
+      update:
+        state: idle
+      update_available: false
+      friendly_name: Round Light
+      supported_features: 63
+      state: 'on'
+    light.window_light:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 54
+      color_temp: 443
+      color:
+        x: 0.5006
+        y: 0.4153
+      linkquality: 120
+      friendly_name: Window Light
+      supported_features: 63
+      state: 'on'
+- id: '1624580841211'
+  name: Living Room Night
+  entities:
+    light.living_room_lights:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - channel_change
+      - finish_effect
+      - okay
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 76
+      color_temp: 469
+      entity_id:
+      - light.dining_table_light
+      - light.round_light
+      friendly_name: Living Room Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
+- id: '1628267199020'
+  name: Living Room Focus
+  entities:
+    light.living_room_lights:
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - channel_change
+      - finish_effect
+      - okay
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp: 227
+      entity_id:
+      - light.dining_table_light
+      - light.round_light
+      - light.window_light
+      friendly_name: Living Room Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
