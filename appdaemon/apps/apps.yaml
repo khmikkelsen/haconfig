@@ -4,15 +4,22 @@ Global:
   module: global
   class: Global
 
+#crypto_zoon:
+#  module: autozooner
+#  class: AutoZooner
+#  logger: cryptozooner_log
+
 music_transition:
   module: music_flow
   class: MusicFlow
   last_notification_sensor: sensor.oneplus_6t_last_notification
   device_tracker: device_tracker.kristians_oneplus
-  contact_sensor: binary_sensor.hallway_sensor_occupancy
+  home_sensor: sensor.kristian_activity
+  start_sensor: binary_sensor.hallway_door_sensor_contact
   speakers: media_player.all_speakers
   default_playlist_id: RDTMAK5uy_kset8DisdE7LSD4TNjEVvrKRTmG7a56sY
-  logger: test_log
+  logger: music_log
+  log_level: DEBUG
 
 bedroom_dimmer:
   module: dimmer_switch
@@ -25,6 +32,7 @@ bedroom_dimmer:
   trans_max: input_number.bedroom_trans_max
   trans_min: input_number.bedroom_trans_min
   log_level: DEBUG
+  logger: dimmer_log
   dependencies: Global
 
 living_room_dimmer:
@@ -39,6 +47,7 @@ living_room_dimmer:
   trans_max: input_number.living_room_trans_max
   trans_min: input_number.living_room_trans_min
   log_level: DEBUG
+  logger: dimmer_log
   dependencies: Global
   
 kitchen_dimmer:
@@ -52,6 +61,7 @@ kitchen_dimmer:
   trans_max: input_number.kitchen_trans_max
   trans_min: input_number.kitchen_trans_min
   log_level: DEBUG
+  logger: dimmer_log
   dependencies: Global
 
 hallway_dimmer:
@@ -64,14 +74,17 @@ hallway_dimmer:
   blocker: input_boolean.hallway_blocker
   trans_max: input_number.hallway_trans_max
   trans_min: input_number.hallway_trans_min
+  logger: dimmer_log
   dependencies: Global
 
 tod:
   module: tod
   class: Tod
+  logger: tod_log
   night_input: binary_sensor.is_nighttime
   tod_input: input_boolean.tod
   mode_input: input_text.mode
+  log_level: DEBUG
 
 bedroom_motion:
   module: motion_sensor
@@ -86,6 +99,7 @@ bedroom_motion:
   scene_day: scene.bedroom_bright
   scene_evening: scene.bedroom_relax
   scene_night: scene.bedroom_night
+  logger: motion_log
 
 living_room_motion:
   module: motion_sensor
@@ -100,6 +114,7 @@ living_room_motion:
   scene_day: scene.living_room_bright
   scene_evening: scene.living_room_relax
   scene_night: scene.living_room_night
+  logger: motion_log
 
 hallway_motion:
   module: motion_sensor
@@ -118,6 +133,7 @@ hallway_motion:
   wait_day: 900
   wait_evening: 900
   wait_night: 120
+  logger: motion_log
 
 kitchen_motion:
   module: motion_sensor
@@ -136,6 +152,7 @@ kitchen_motion:
   wait_day: 900
   wait_evening: 900
   wait_night: 120
+  logger: motion_log
 
 bathroom_motion:
   module: motion_sensor
@@ -149,3 +166,4 @@ bathroom_motion:
   wait_day: 660
   wait_evening: 660
   wait_night: 660
+  logger: motion_log

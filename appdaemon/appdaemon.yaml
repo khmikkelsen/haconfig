@@ -31,3 +31,18 @@ logs:
   test_log:
     name: Test
     filename: /config/logs/test.log
+  tod_log:
+    name: Time of day
+    filename: /config/logs/tod.log
+  motion_log:
+    name: Motion
+    filename: /config/logs/motion.log
+  music_log:
+    name: Music Flow
+    filename: /config/logs/music_flow.log
+  cryptozooner_log:
+    name: CryptoZooner
+    filename: /config/logs/crypto_zooner.log
+  dimmer_log:
+    name: Dimmer Switch
+    filename: /config/logs/dimmer_switch.log
