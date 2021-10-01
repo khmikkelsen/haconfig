@@ -18,6 +18,101 @@
         {{[ states.input_boolean.solveigs_gn,
             states.input_boolean.kristians_gn] | selectattr('state', 'eq', 'on') | list | count}}
 
+- trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: event_template_reloaded
+  - platform: state
+    entity_id: media_player.bedroom_speaker
+    attribute: 'volume_level'
+  sensor:
+  - name: bedroom_volume_level
+    unique_id: '12354434235345'
+    state: >
+      {% set vol = state_attr('media_player.bedroom_speaker','volume_level') %}
+      {% if vol == None or vol | float < 0.02 %}
+        {{ states('sensor.bedroom_volume_level') }}
+      {% else %}
+        {{ vol }}
+      {% endif %}
+
+- trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: event_template_reloaded
+  - platform: state
+    entity_id: sensor.bedroom_speaker_alarms
+  sensor:
+  - name: next_alarm_bedroom
+    unique_id: '1235443498056705'
+    state: >
+      {% set next = states('sensor.bedroom_speaker_alarms') %}
+      {% if next == None or next == 'unavailable' or next == 'unknown' %}
+        {{ states('sensor.next_alarm_bedroom') }}
+      {% else %}
+        {{ next }}
+      {% endif %}
+
+- trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: event_template_reloaded
+  - platform: state
+    entity_id: media_player.living_room_speaker
+    attribute: 'volume_level'
+  sensor:
+  - name: living_room_volume_level
+    unique_id: '120909434235345'
+    state: >
+      {% set vol = state_attr('media_player.living_room_speaker','volume_level') %}
+      {% if vol == None or vol | float < 0.02 %}
+        {{ states('sensor.living_room_volume_level') }}
+      {% else %}
+        {{ vol }}
+      {% endif %}
+
+- trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: event_template_reloaded
+  - platform: state
+    entity_id: media_player.bathroom_speaker
+    attribute: 'volume_level'
+  sensor:
+  - name: bathroom_volume_level
+    unique_id: '12090546034545'
+    state: >
+      {% set vol = state_attr('media_player.bathroom_speaker','volume_level') %}
+      {% if vol == None or vol | float < 0.02 %}
+        {{ states('sensor.bathroom_volume_level') }}
+      {% else %}
+        {{ vol }}
+      {% endif %}
+
+- trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: event_template_reloaded
+  - platform: state
+    entity_id: media_player.kitchen_speaker
+    attribute: 'volume_level'
+  sensor:
+  - name: kitchen_volume_level
+    unique_id: '124569934534532'
+    state: >
+      {% set vol = state_attr('media_player.kitchen_speaker','volume_level') %}
+      {% if vol == None or vol | float < 0.02 %}
+        {{ states('sensor.kitchen_volume_level') }}
+      {% else %}
+        {{ vol }}
+      {% endif %}
+  
+
 - binary_sensor:
   - name: Is Nighttime
     state: >
