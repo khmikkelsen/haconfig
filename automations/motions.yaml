@@ -6,8 +6,7 @@
     from: "on"
     to: "off"
   action:
-    - service: >
-        input_select.select_first
+    - service: input_select.select_first
       entity_id: input_select.living_room_selector
 - id: '9002832834906'
   alias: Update Bedroom Selector
@@ -17,8 +16,7 @@
     from: "on"
     to: "off"
   action:
-    - service: >
-        input_select.select_first
+    - service: input_select.select_first
       entity_id: input_select.bedroom_scene_selector
 - id: '90023450098236'
   alias: Update Kitchen Selector
@@ -28,6 +26,5 @@
     from: "on"
     to: "off"
   action:
-    - service: >
-        input_select.select_first
+    - service: input_select.select_first
       entity_id: input_select.kitchen_scene_selector
