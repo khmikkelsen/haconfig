@@ -27,10 +27,10 @@ class Motion(hass.Hass):
             self._scene_night = args.get('scene_night')
             self.blocker = args.get('blocker', None)
             self._min_lx = args.get('min_lx', 55)
-            self.wait_morning = args.get('wait_morning', 600)
-            self.wait_day = args.get('wait_day', 2400)
-            self.wait_evening = args.get('wait_evening', 1500)
-            self.wait_night = args.get('wait_night', 60)
+            self._wait_morning = args.get('wait_morning', 600)
+            self._wait_day = args.get('wait_day', 2400)
+            self._wait_evening = args.get('wait_evening', 1500)
+            self._wait_night = args.get('wait_night', 60)
             self.off_transition = args.get('off_transition', 15.0)
             self.on_transition = args.get('on_transition', 0.7)
             self._offset_evening = args.get('offset_evening', '15:00')
@@ -60,10 +60,12 @@ class Motion(hass.Hass):
         if await self.is_local_control():
             supported_colors = await self.get_state(self.light_group, attribute='supported_color_modes')
             mode = await self.get_mode()
-            if supported_colors == ['onoff']:
-                await self.turn_on(self.light_group)
-            else:
-                await self.turn_on(getattr(self, f'scene_{mode}'), transition=self.on_transition)
+            state = await self.get_state(self.light_group)
+            if state == 'off':
+                if supported_colors == ['onoff']:
+                    await self.turn_on(self.light_group)
+                else:
+                    await self.turn_on(getattr(self, f'scene_{mode}'), transition=self.on_transition)
             self._motion_off_listener = self.motion_listener_off
             
     async def motion_off(self, entity, attribute, old, new, kwargs):
@@ -96,7 +98,7 @@ class Motion(hass.Hass):
         mode = await self.get_mode()
         scene = getattr(self, f'scene_{mode}')
         lights_state = await self.get_state(self.light_group)
-        if lights_state == 'on':
+        if lights_state == 'on' and mode != 'night':
             try:
                 self.log(f'mode_changed to scene: {scene}')
                 await self.turn_on(self.blocker)
@@ -154,6 +156,23 @@ class Motion(hass.Hass):
             return self._scene_night
         else:
             return self.light_group
+
+    @property
+    def wait_morning(self):
+        return int(self._wait_morning)
+
+    @property
+    def wait_day(self):
+        return int(self._wait_day)
+
+    @property
+    def wait_evening(self):
+        return int(self._wait_evening)
+
+    @property
+    def wait_night(self):
+        return int(self._wait_night)
+        
 
     @property
     def motion_listener(self):
