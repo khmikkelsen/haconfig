@@ -35,9 +35,11 @@ lovelace:
 wake_on_lan:
 
 logger:
-  default: info
+  default: warning
   logs:
     custom_components.ytube_music_player: debug
+    custom_components.google_home: debug
+    glocaltokens: debug
 
 webostv:
   host: !secret webos_ip
@@ -57,6 +59,7 @@ google_assistant:
     - switch
     - input_boolean
     - light
+    - scene
   entity_config:
     light.bathroom_light:
       expose: true
@@ -120,6 +123,7 @@ homeassistant:
   allowlist_external_dirs:
     - "/config/blueprints"
   customize: !include customize.yaml
+
 
 
 
