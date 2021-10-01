@@ -103,10 +103,12 @@ class Tod(hass.Hass):
         # res = self.format_t((datetime.datetime.now() + datetime.timedelta(seconds=10)).time())
         return res
 
-    def night_cb(self, entity, attribute, old, new, kwargs):
-        self.set_state(self._mode, state='night')
-        self.log(f'MODE_CHANGED to night')
-        self._night_trigger_time = datetime.datetime.now()
+    async def night_cb(self, entity, attribute, old, new, kwargs):
+        now = datetime.datetime.now().time()
+        if any([now < x for x in (await self.start_morning, await self.start_day, await self.start_evening)]):
+            await self.set_state(self._mode, state='night')
+            self.log(f'MODE_CHANGED to night')
+            self._night_trigger_time = datetime.datetime.now()
 
     def format_t(self, t) -> datetime.time:
         t = str(t).split('.')[0]
