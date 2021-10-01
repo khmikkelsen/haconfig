@@ -29,7 +29,7 @@
           {% if is_state('input_text.mode', 'morning') %}
             RDQMlnrNu4KErZI
           {% elif is_state('input_text.mode', 'day') %}
-            RDTMAK5uy_nTsa0Irmcu2li2-qHBoZxtrpG9HuC3k_Q
+            RDTMAK5uy_kset8DisdE7LSD4TNjEVvrKRTmG7a56sY
           {% elif is_state('input_text.mode', 'evening') %}
             RDTMAK5uy_nzfwl2UYv7htL7wDoxbX8Pp6UAFBd92cQ
           {% else %}
@@ -39,13 +39,13 @@
           {% if is_state('input_text.mode', 'morning') %}
             radio
           {% elif is_state('input_text.mode', 'day') %}
-            playlist
+            channel
           {% elif is_state('input_text.mode', 'evening') %}
-            playlist
+            channel
           {% else %}
-            playlist
+            channel
           {% endif %}
-    - wait_template: "{{ states('sensor.shower_sensor_humidity') | int < 80 }}"
+    - wait_template: "{{ states('sensor.shower_sensor_humidity') | int < 72 }}"
     - service: media_player.media_stop
       data:
         entity_id: media_player.bathroom_speaker
