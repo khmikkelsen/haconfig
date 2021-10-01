@@ -54,24 +54,15 @@
         - sensor.door_bell_switch_action
       to: 'single'
   action:
-    - service: scene.create
-      data:
-        scene_id: before_ring
-        snapshot_entities:
-        - media_player.all_speakers
-    - service: media_player.volume_set
-      data:
-        entity_id: media_player.all_speakers
-        volume_level: 0.5
     - service: media_player.play_media
       data:
-        entity_id: media_player.all_speakers
+        entity_id: 
+          - media_player.bedroom_speaker
+          - media_player.kitchen_speaker
+          - media_player.living_room_speaker
+          - media_player.bathroom_speaker
         media_content_type: 'music'
         media_content_id: https://khmha.stormcraft.de/local/doorbell.mp3
-    - delay: 4
-    - service: scene.apply
-      target:
-        entity_id: scene.before_ring
 - id: '39834091232213'
   alias: Shower Button
   mode: restart
@@ -90,6 +81,18 @@
           {% else %}
             media_player.bathroom_speaker
           {% endif %}
+- id: '39834095324243535'
+  alias: Shower Button Double
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.desktop_switch_action
+      to: 'double'
+  action:
+    - service: media_player.volume_up
+      target:
+        entity_id: media_player.bathroom_speaker
 - id: '12315344234'
   alias: Set Solveig Gn
   mode: restart
