@@ -35,6 +35,9 @@ bedroom_goodnight:
     - service: media_player.turn_off
       target:
         entity_id: media_player.living_room_tv
+    - delay: 900
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.bedroom_blocker
 bedroom_morning:
   alias: Bedroom Morning
   sequence:
@@ -58,16 +61,5 @@ bedroom_morning:
         entity_id:
           - binary_sensor.bathroom_sensor_occupancy
         to: 'on'
-    - service: script.set_hue_sensitivity
-      data:
-        mode: 'high'
-    - service: light.turn_off
-      target:
-        entity_id: light.bedroom_lights
-    - service: input_number.set_value
-      entity_id: input_number.alarm_volume
-      data:
-        value: 0.4
-    - service: automation.turn_off
-      entity_id: automation.gtfo_bed
+    
 
