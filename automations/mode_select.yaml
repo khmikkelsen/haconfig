@@ -1,5 +1,6 @@
 - id: '12313123134244'
   alias: Kristian Mode Select
+  mode: queued
   trigger:
     - platform: state
       entity_id:
@@ -29,6 +30,7 @@
           {% endif %}
 - id: '123132432441235'
   alias: Solveig Mode Select
+  mode: queued
   trigger:
     - platform: state
       entity_id:
