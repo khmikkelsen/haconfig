@@ -99,6 +99,7 @@ bedroom_motion:
   scene_day: scene.bedroom_bright
   scene_evening: scene.bedroom_relax
   scene_night: scene.bedroom_night
+  wait_night: 2
   logger: motion_log
 
 living_room_motion:
