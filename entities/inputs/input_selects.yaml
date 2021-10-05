@@ -31,3 +31,13 @@ solveig_activity:
   - Work
   - Night
   - Away
+shower_speaker_genre:
+  options:
+  - pop
+  - chill
+  - hiphop
+  - dance
+  - rock
+  - metal
+  - r&b
+  - jazz
