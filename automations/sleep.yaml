@@ -245,6 +245,14 @@
         entity_id:
           - input_boolean.solveigs_gn
           - input_boolean.kristians_gn
+- id: '9235423040123'
+  alias: Backup Solveig Gn
+  trigger:
+    - platform: time
+      at: "02:00:00"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.solveigs_gn
   
       
       
