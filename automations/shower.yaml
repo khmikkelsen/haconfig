@@ -22,30 +22,95 @@
       data:
         source: bathroom_speaker
         entity_id: media_player.ytube_music_player
-    - service: media_player.play_media
+    - service: input_select.select_option
       data:
-        entity_id: media_player.ytube_music_player
-        media_content_id: >
-          {% if is_state('input_text.mode', 'morning') %}
-            RDQMlnrNu4KErZI
-          {% elif is_state('input_text.mode', 'day') %}
-            RDTMAK5uy_kset8DisdE7LSD4TNjEVvrKRTmG7a56sY
-          {% elif is_state('input_text.mode', 'evening') %}
-            RDTMAK5uy_nzfwl2UYv7htL7wDoxbX8Pp6UAFBd92cQ
+        option: >
+          {set mode = states('input_text.mode') %}
+          {% if mode == 'morning' %}
+            chill
+          {% elif mode == 'day' %}
+            pop
+          {% elif mode == 'evening' %}
+            pop
           {% else %}
-            RDTMAK5uy_nzfwl2UYv7htL7wDoxbX8Pp6UAFBd92cQ
+            chill
           {% endif %}
-        media_content_type: >
-          {% if is_state('input_text.mode', 'morning') %}
-            radio
-          {% elif is_state('input_text.mode', 'day') %}
-            channel
-          {% elif is_state('input_text.mode', 'evening') %}
-            channel
-          {% else %}
-            channel
-          {% endif %}
+      entity_id: input_select.shower_speaker_genre
     - wait_template: "{{ states('sensor.shower_sensor_humidity') | int < 72 }}"
     - service: media_player.media_stop
       data:
         entity_id: media_player.bathroom_speaker
+- id: '12301231294560965'
+  alias: Shower Genre Changed
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: input_select.shower_speaker_genre
+  action:
+    - choose:
+        conditions: not
+          - "{{ state_attr('media_player.ytube_music_player', '_player_id') == 'media_player.bathroom_speaker'}}"
+        sequence:
+          - service: media_player.select_source
+            data:
+              source: bathroom_speaker
+              entity_id: media_player.ytube_music_player
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.ytube_music_player
+        media_content_id: >
+          {% set genre = states('input_select.shower_speaker_genre') %}
+          {% if genre == 'pop' %}
+            RDCLAK5uy_kmPRjHDECIcuVwnKsx2Ng7fyNgFKWNJFs
+          {% elif genre == 'chill' %}
+            RDCLAK5uy_np_soSTj6w3-N7Dh_xmdDpQINJ8LsVpa8
+          {% elif genre == 'hiphop' %}
+            RDCLAK5uy_lBGRuQnsG37Akr1CY4SxL0VWFbPrbO4gs
+          {% elif genre == 'dance' %}
+            RDCLAK5uy_nRcmJRDK2VM2rC-98B9Uk3f8m2McAQHYg
+          {% elif genre == 'rock' %}
+            RDCLAK5uy_nLtxizvEMkzYQUrA-bFf6MnBeR4bGYWUQ
+          {% elif genre == 'metal' %}
+            RDCLAK5uy_lhO-w4BZWObj7daKVuBz_A2wORvjyBCZU
+          {% elif genre == 'r&b' %}
+            RDCLAK5uy_kvZ03LMpKqRtfHSYWyoUbZnDqC28Xp9h8
+          {% elif genre == 'jazz' %}
+            RDCLAK5uy_nSsvl8hgvOKsBxXbN6Xf7F1RFsYsAkkWk
+          {% endif %}
+        media_content_type: playlist
+- id: '1234956089073'
+  alias: Shower Speaker change volume slider
+  max_exceeded: silent
+  trigger:
+    - platform: numeric_state
+      entity_id: media_player.bathroom_speaker
+      value_template: "{{ state.attributes.volume_level | float }}"
+      below: 0.01
+    - platform: numeric_state
+      entity_id: media_player.bathroom_speaker
+      value_template: "{{ state.attributes.volume_level | float }}"
+      above: 0.99
+  condition:
+    - condition: or
+      conditions:
+        - condition: numeric_state
+          entity_id: sensor.shower_sensor_humidity
+          above: 82
+  action:
+    - service: >
+        {% if state_attr('media_player.bathroom_speaker', 'volume_level') | float > 0.99 %}
+          input_boolean.turn_off
+        {% else %}
+          input_boolean.turn_on
+        {% endif %}
+      entity_id: input_boolean.shower_volume_up
+- id: '1230123567004533'
+  alias: Shower Button Double
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: sensor.bathroom_shower_switch_action
+      to: 'double'
+  action:
+    - service: input_select.select_next
+      entity_id: input_select.shower_speaker_genre

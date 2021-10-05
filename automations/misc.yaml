@@ -57,6 +57,7 @@
       - condition: state
         entity_id: media_player.bedroom_speaker
         state: 'idle'
+        for: '01:00'
       - condition: state
         entity_id: media_player.bedroom_speaker
         state: 'paused'

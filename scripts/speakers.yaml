@@ -3,6 +3,12 @@ bedroom_keep_alive:
   sequence:
     - choose:
         - conditions:
+            - "{{ state_attr('media_player.ytube_music_player', '_player_id') == 'media_player.bedroom_speaker' }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ytube_music_player
+    - choose:
+        - conditions:
             - "{{ states('media_player.bedroom_speaker') == 'off' or states('media_player.bedroom_speaker') == 'paused' }}" 
           sequence:
           - service: media_player.volume_mute
@@ -16,7 +22,7 @@ bedroom_keep_alive:
             data:
               media_content_id: https://khmha.stormcraft.de/local/1sec.mp3
               media_content_type: music
-          - delay: 3
+          - delay: 4
           - service: media_player.volume_mute
             target:
               entity_id: media_player.bedroom_speaker
@@ -36,6 +42,12 @@ living_room_keep_alive:
   sequence:
     - choose:
         - conditions:
+            - "{{ state_attr('media_player.ytube_music_player', '_player_id') == 'media_player.living_room_speaker' }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ytube_music_player
+    - choose:
+        - conditions:
             - "{{ states('media_player.living_room_speaker') == 'off' or states('media_player.living_room_speaker') == 'paused' }}" 
           sequence:
           - service: media_player.volume_mute
@@ -49,7 +61,7 @@ living_room_keep_alive:
             data:
               media_content_id: https://khmha.stormcraft.de/local/1sec.mp3
               media_content_type: music
-          - delay: 3
+          - delay: 4
           - service: media_player.volume_mute
             target:
               entity_id: media_player.living_room_speaker
@@ -69,6 +81,12 @@ bathroom_keep_alive:
   sequence:
     - choose:
         - conditions:
+            - "{{ state_attr('media_player.ytube_music_player', '_player_id') == 'media_player.bathroom_speaker' }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ytube_music_player
+    - choose:
+        - conditions:
             - "{{ states('media_player.bathroom_speaker') == 'off' or states('media_player.bathroom_speaker') == 'paused' }}" 
           sequence:
           - service: media_player.volume_mute
@@ -82,7 +100,7 @@ bathroom_keep_alive:
             data:
               media_content_id: https://khmha.stormcraft.de/local/1sec.mp3
               media_content_type: music
-          - delay: 3
+          - delay: 4
           - service: media_player.volume_mute
             target:
               entity_id: media_player.bathroom_speaker
@@ -102,6 +120,12 @@ kitchen_keep_alive:
   sequence:
     - choose:
         - conditions:
+            - "{{ state_attr('media_player.ytube_music_player', '_player_id') == 'media_player.kitchen_speaker' }}"
+          sequence:
+            - service: media_player.turn_off
+              entity_id: media_player.ytube_music_player
+    - choose:
+        - conditions:
             - "{{ states('media_player.kitchen_speaker') == 'off' or states('media_player.kitchen_speaker') == 'paused' }}" 
           sequence:
           - service: media_player.volume_mute
@@ -115,7 +139,7 @@ kitchen_keep_alive:
             data:
               media_content_id: https://khmha.stormcraft.de/local/1sec.mp3
               media_content_type: music
-          - delay: 3
+          - delay: 4
           - service: media_player.volume_mute
             target:
               entity_id: media_player.kitchen_speaker
