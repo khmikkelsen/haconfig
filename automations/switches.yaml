@@ -82,15 +82,21 @@
             media_player.bathroom_speaker
           {% endif %}
 - id: '39834095324243535'
-  alias: Shower Button Double
+  alias: Shower Button Hold
   mode: restart
   trigger:
     - platform: state
       entity_id:
         - sensor.desktop_switch_action
-      to: 'double'
+      to: 'hold'
+      for: '00:00:01'
   action:
-    - service: media_player.volume_up
+    - service: >
+        {% if is_state('input_boolean.shower_volume_up', 'on') %}
+          media_player.volume_up
+        {% else %}
+          media_player.volume_down
+        {% endif %}
       target:
         entity_id: media_player.bathroom_speaker
 - id: '12315344234'
