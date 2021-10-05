@@ -33,3 +33,5 @@ solveigs_gn:
   name: Solveig is asleep
 kristians_gn:
   name: Kristian is asleep
+shower_volume_up:
+  name: Shower speaker volume up
