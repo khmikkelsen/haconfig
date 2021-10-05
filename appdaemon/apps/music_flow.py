@@ -19,7 +19,7 @@ class MusicFlow(hass.Hass):
             if self.args.get('logger'):
                 self.logger = self.get_user_log(self.args['logger'])
             self.notification_sensor = self.args['last_notification_sensor']
-            self.tracker = self.args['device_tracker']
+            self.person = self.args['person']
             self.trigger_play_sensor = self.args['start_sensor']
             self.speakers = self.args['speakers']
             self.default_playlist = self.args['default_playlist_id']
@@ -27,7 +27,7 @@ class MusicFlow(hass.Hass):
             self.only_alone = False if self.only_alone else True
             self.ytm = YTMusic()
 
-            self.home_handle = self.listen_state(self.entered_home_zone_cb, self.tracker, new='home', old='not_home')
+            self.home_handle = self.listen_state(self.entered_home_zone_cb, self.person, new='home', old='not_home')
             self.noti_handle = self.listen_state(self.new_notification_cb, self.notification_sensor, attribute='all', immediate=True)
             self.content_id = None
             self.play_handle = None
@@ -89,9 +89,9 @@ class MusicFlow(hass.Hass):
 
     def is_alone(self, **kwargs):
         alone = False
-        trackers = self.get_trackers()
+        trackers = self.get_trackers(person=True)
         for tracker in trackers:
-            if tracker != self.tracker:
+            if tracker != self.person:
                 state = self.get_state(tracker)
                 self.log(f'external trackers: {str(tracker)}, state: {state}')
                 alone = (state == 'home') or alone

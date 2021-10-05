@@ -13,8 +13,7 @@ music_transition:
   module: music_flow
   class: MusicFlow
   last_notification_sensor: sensor.oneplus_6t_last_notification
-  device_tracker: device_tracker.kristians_oneplus
-  home_sensor: sensor.kristian_activity
+  person: person.khm
   start_sensor: binary_sensor.hallway_door_sensor_contact
   speakers: media_player.all_speakers
   default_playlist_id: RDTMAK5uy_kset8DisdE7LSD4TNjEVvrKRTmG7a56sY
@@ -129,7 +128,7 @@ hallway_motion:
   scene_morning: scene.hallway_evening
   scene_day: scene.hallway_bright
   scene_evening: scene.hallway_evening
-  scene_night: scene.hallway_night
+  scene_night: scene.hallway_evening
   wait_morning: 660
   wait_day: 900
   wait_evening: 900
