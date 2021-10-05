@@ -105,7 +105,7 @@ class Tod(hass.Hass):
 
     async def night_cb(self, entity, attribute, old, new, kwargs):
         now = datetime.datetime.now().time()
-        if any([now < x for x in (await self.start_morning, await self.start_day, await self.start_evening)]):
+        if any([now < x for x in (await self.start_morning(), await self.start_day(), await self.start_evening())]):
             await self.set_state(self._mode, state='night')
             self.log(f'MODE_CHANGED to night')
             self._night_trigger_time = datetime.datetime.now()
