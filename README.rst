@@ -20,6 +20,7 @@ Switches
 --------
 - 3x Philips Hue Dimmer Switches 2nd gen
 - 6x Aqara Mini Switch
+- 1x Sonoff BASICZBR3
 
 Sensors
 -------
