@@ -8,7 +8,7 @@ A complete list of my setup, more being added almost weekly :)
 
 Lights
 -------
-- 8x Philips Hue White and Color Ambiance E27 3rd gen
+- 9x Philips Hue White and Color Ambiance E27 3rd gen
 - 1x Philips Hue White and Color Ambiance E14 3rd gen
 
 Speakers
