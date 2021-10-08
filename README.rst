@@ -21,6 +21,7 @@ Switches
 - 3x Philips Hue Dimmer Switches 2nd gen
 - 6x Aqara Mini Switch
 - 1x Sonoff BASICZBR3
+- 1x Hue Power Plug
 
 Sensors
 -------
@@ -28,6 +29,10 @@ Sensors
 - 4x Aqara Motion Sensor
 - 1x Aqara Temperature & Humidity Sensor
 - 1x Aeotec Multipurpose Sensor
+
+Thermostat
+----------
+- 2x Danfoss Ally
 
 Network
 -------
